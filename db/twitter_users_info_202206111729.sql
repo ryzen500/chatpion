@@ -1,0 +1,2 @@
+INSERT INTO chatpion.twitter_users_info (user_id,oauth_token,oauth_token_secret,screen_name,twitter_user_id,name,profile_image,followers,add_date) VALUES
+	 (1,'1534821335574388736-n1Czy4K0xYu64jIErJwG27QHP0PevP','owTPtKMPDMg4T5bgNWBHglfLa8RxItw7JUIrCibB0c8c8','tsany_achmad','1534821335574388736','Achmad tsany','https://pbs.twimg.com/profile_images/1534821402620358656/xfwF93p5_normal.png',1,'2022-06-09');

@@ -1,0 +1,3 @@
+INSERT INTO chatpion.facebook_rx_config (app_name,api_id,api_secret,numeric_id,user_access_token,status,deleted,user_id,use_by,developer_access,facebook_id,secret_code) VALUES
+	 ('TEST CHATPION','543796817192809','3b24b81bbf19bcf09a52f7d2e2218a58','','EAAHulJAeZA2kBAPsloCyYPCZAPoYyhpWZB1IZAMJEWC6BX0fGqcz6r5lb24v2iZAY8ogSZAIGPgFZBAiotUMmlkTgC0QIVpg4BVbKGjwn8slp8SOni08uovDFH57f1S4OJbGPohTCal405SWuhZBjp3fSK5t1VB7GRv6If1QMqEWmwOahZCloCZCA0','0','0',1,'everyone','0','',''),
+	 ('TEST CHATPION 2','736829657458056','3229329cfefd6bf9da0bb4286bbbf32b','','EAAKeJIXZBJYgBAHFAYSAynBi9r8CZBNPa2CGNZARAeKRZBaZBdUlVqiAoDLhGTECM0oVKUPSBnrFksvkwxnvtYmDGZBTYDEDR3fNcgzf0p0KzPZAAMeV9cbFUdLiKkYx5CxF0QFS66jPC579mEtYEbGwdTeDIkE8ozGcKLd0pGtDhf6UACput9u','1','0',1,'everyone','0','','');
