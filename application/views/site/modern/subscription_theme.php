@@ -29,7 +29,7 @@
   <script src="<?php echo base_url(); ?>assets/modules/sweetalert/sweetalert.min.js"></script>
 </head>
 
-<body class="bg-info-light-alt gradient">
+<body class="bg-info-light-alt gradient"style="background-image:url('http://localhost/chatpion/assets/img/ilustrasi-kependudukan.jpg')">
   <div id="app">
     <section class="section">
       <?php echo $this->load->view($body); ?>

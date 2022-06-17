@@ -34,11 +34,11 @@
   $("document").ready(function(){
 
     setTimeout(function(){
-        auto_refresh_con = setInterval(function(){$('.open_conversation.bg-light').click();},refresh_interval);
+        // auto_refresh_con = setInterval(function(){$('.open_conversation.bg-light').click();},refresh_interval);
         $(document).on('change','#refresh_interval',function(e){
           refresh_interval = $("#refresh_interval").val();
-          clearInterval(auto_refresh_con);
-          auto_refresh_con = setInterval(function(){$('.open_conversation.bg-light').click();},refresh_interval);
+          // clearInterval(auto_refresh_con);
+          // auto_refresh_con = setInterval(function(){$('.open_conversation.bg-light').click();},refresh_interval);
         });
         // setInterval(function(){$('#refresh_data').click();},180015);
         ajax_call(".open_conversation:first");

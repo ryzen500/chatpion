@@ -102,3 +102,14 @@
 
   </div>
 </section>
+
+
+<script>
+  var social_media = 'fb';
+  var get_post_conversation_url = 'get_post_conversation_whatsapp';
+  var get_pages_conversation_url = 'get_pages_conversation_whatsapp';
+  var reply_to_conversation_url = 'reply_to_conversation';
+</script>
+
+
+<?php include(FCPATH.'application/views/message_manager/whats_app_message_dashboard_common_js.php');?>  

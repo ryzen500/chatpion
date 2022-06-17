@@ -1,7 +1,7 @@
 <div class="main-sidebar">
   <aside id="sidebar-wrapper">
     <div class="sidebar-brand">
-      <a href="<?php echo base_url(); ?>"><img src="<?php echo base_url(); ?>assets/img/logo-sayangku-biru.png" alt='<?php echo $this->config->item("product_short_name"); ?>'></a>
+      <a href="<?php echo base_url(); ?>"><img src="<?php echo base_url(); ?>assets/img/logo-sayangkuu.png" alt='<?php echo $this->config->item("product_short_name"); ?>'></a>
     </div>
     <div class="sidebar-brand sidebar-brand-sm">
       <!-- <a href="<?php echo base_url(); ?>dist/index"><i class="fa fa-prescription"></i></a> -->

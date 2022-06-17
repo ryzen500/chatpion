@@ -2,6 +2,7 @@
     exit('No direct script access allowed');
 }
 
+
 /**
 * @category controller
 * class home
