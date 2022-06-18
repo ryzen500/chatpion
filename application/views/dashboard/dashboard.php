@@ -151,6 +151,62 @@ $month_name_array = array(
 
       </div>
 
+      <div class="col-lg-4 col-md-6 col-sm-12 pr-md-1" id="ecommerce_chart_1">
+        <div class="card card-statistic-2 border">
+          <div class="card-chart">
+            <canvas id="subscribers_chart_1" height="72"></canvas>
+          </div>
+          <div class="card-stats mb-1">
+            <div class="text-center waiting hidden" id="loader"><i class="fas fa-spinner fa-spin blue text-center" style="font-size: 40px;"></i></div>
+            <div class="card-stats-items month_change_middle_content">
+              <div class="card-stats-item">
+                <div class="card-stats-item-count text-primary gradient" id="fbsub"><?php echo custom_number_format($fbsub); ?></div>
+                <div class="card-stats-item-label"><?php echo $this->lang->line('Jumlah Orang Chat'); ?></div>
+              </div>
+              <div class="card-stats-item">
+                <div class="card-stats-item-count text-secondary gradient" id="igsub"><?php echo custom_number_format($igsub); ?></div>
+                <div class="card-stats-item-label"><?php echo $this->lang->line('Jumlah Chat Whats app'); ?></div>
+              </div>
+              <!-- <div class="card-stats-item">
+                <div class="card-stats-item-count text-info gradient" id="esub"><?php echo custom_number_format($esub); ?></div>
+                <div class="card-stats-item-label"><?php echo $this->lang->line('Ecommerce'); ?></div>
+              </div> -->
+            </div>
+          </div>
+
+          <div class="card-icon shadow-primary bg-primary gradient">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div class="card-wrap">
+            <div class="card-header">
+              <h4 class="text-dark dropleft">
+                <?php echo $this->lang->line('Total WhatsApp'); ?>
+                <a class="dropdown-toggle text-muted float-right text-small"  data-toggle="dropdown" href="#" id="orders-month"><?php echo $month_name_array[$month_number]; ?></a>
+                <ul class="dropdown-menu dropdown-menu-sm">
+                  <!-- <li class="dropdown-title"><?php echo $this->lang->line('Select Month'); ?></li> -->
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '01') echo 'active'; ?>" month_no="01"><?php echo $this->lang->line('January');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '02') echo 'active'; ?>" month_no="02"><?php echo $this->lang->line('February');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '03') echo 'active'; ?>" month_no="03"><?php echo $this->lang->line('March');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '04') echo 'active'; ?>" month_no="04"><?php echo $this->lang->line('April');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '05') echo 'active'; ?>" month_no="05"><?php echo $this->lang->line('May');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '06') echo 'active'; ?>" month_no="06"><?php echo $this->lang->line('June');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '07') echo 'active'; ?>" month_no="07"><?php echo $this->lang->line('July');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '08') echo 'active'; ?>" month_no="08"><?php echo $this->lang->line('August');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '09') echo 'active'; ?>" month_no="09"><?php echo $this->lang->line('September');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '10') echo 'active'; ?>" month_no="10"><?php echo $this->lang->line('October');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '11') echo 'active'; ?>" month_no="11"><?php echo $this->lang->line('November');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '12') echo 'active'; ?>" month_no="12"><?php echo $this->lang->line('December');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == 'year') echo 'active'; ?>" month_no="year"><?php echo $this->lang->line('This Year');?></a></li>
+                </ul>
+                
+              </h4>
+            </div>
+            <div class="card-body text-primary gradient" id="total_subscribers"><?php echo custom_number_format($total_sub); ?></div>
+          </div>
+        </div>
+      </div>
+
+<!-- 
       <div class="col-lg-4 col-md-6 col-sm-12 pl-md-1">
         <div class="card card-statistic-2 border">
           <div class="card-chart">
@@ -183,7 +239,7 @@ $month_name_array = array(
                 <?php echo $this->lang->line('Total Earnings'); ?>
                 <a class="dropdown-toggle text-muted float-right text-small" data-toggle="dropdown" href="#" id="ecommerce-month"><?php echo $month_name_array[$month_number]; ?></a>
                 <ul class="dropdown-menu dropdown-menu-sm">
-                  <!-- <li class="dropdown-title"><?php echo $this->lang->line('Select Month'); ?></li> -->
+                   <li class="dropdown-title"><?php echo $this->lang->line('Select Month'); ?></li> 
                   <li><a href="#" class="dropdown-item ecommerce_month_change <?php if($month_number == '01') echo 'active'; ?>" month_no="01"><?php echo $this->lang->line('January');?></a></li>
                   <li><a href="#" class="dropdown-item ecommerce_month_change <?php if($month_number == '02') echo 'active'; ?>" month_no="02"><?php echo $this->lang->line('February');?></a></li>
                   <li><a href="#" class="dropdown-item ecommerce_month_change <?php if($month_number == '03') echo 'active'; ?>" month_no="03"><?php echo $this->lang->line('March');?></a></li>
@@ -216,7 +272,9 @@ $month_name_array = array(
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
+
+      
     </div>
   
 
@@ -685,7 +743,8 @@ $month_name_array = array(
 
 <script type="text/javascript">
   
-  var subscribers_chart = document.getElementById("subscribers_chart_1").getContext('2d');
+  // var subscribers_chart = document.getElementById("subscribers_chart_1").getContext('2d');
+  var subscribers_chart = document.getElementById("subscribers_chart_1");
 
   var sevendays_subscriber_chart_bgcolor = subscribers_chart.createLinearGradient(0, 0, 0, 70);
   sevendays_subscriber_chart_bgcolor.addColorStop(0, 'rgba(21, 233, 255, .3)');

@@ -22,6 +22,8 @@ class Dashboard extends Home
         redirect('home/login_page', 'location');
         $this->user_id=$this->session->userdata('user_id');
     
+        $this->load->library("fb_rx_login");
+
         set_time_limit(0);
         $this->important_feature();
         $this->member_validity();   
@@ -99,7 +101,24 @@ class Dashboard extends Home
             $where['where']['user_id'] = $user_id;
             $select = array('SUM(subscriber_type="system") as esub','SUM(CASE WHEN subscriber_type="messenger" AND social_media="fb" THEN 1 ELSE 0 END) as fbsub','SUM(CASE WHEN subscriber_type="messenger" AND social_media="ig" THEN 1 ELSE 0 END) as igsub');
 
-            $subscriber_info = $this->basic->get_data('messenger_bot_subscriber',$where,$select);
+           $subscriber_info = $this->basic->get_data('messenger_bot_subscriber',$where,$select);
+       
+    //    $items = $this->db->select('user_id, COUNT(user_id) AS count', false)
+    //    ->from('instagram_chat')
+    //    ->group_by('user_id')
+    //    ->get()->result();
+       $items = $this->fb_rx_login->get_messages_from_thread_pelapor(); 
+
+
+    //    var_dump($items['data']);
+       
+       $itemsChat = $this->db->count_all('whats_app_chat');
+
+    //    var_dump($itemsChat);
+       $igsubs=$itemsChat;
+    //    var_dump(sizeof($items));
+    $fbsubs = count($items['data']);
+        // var_dump($this->db->last_query());
 
             if(count($subscriber_info) == 1 || count($subscriber_info) > 1) {
                 $fbsub = $subscriber_info[0]['fbsub'] ?? 0;
@@ -122,8 +141,8 @@ class Dashboard extends Home
             }
             // this section is for circle chart under different subscriber source
 
-            $data['fbsub'] = $fbsub;
-            $data['igsub'] = $igsub;
+            $data['fbsub'] = $fbsubs;
+            $data['igsub'] = $igsubs;
             $data['esub'] = $esub;
             $data['total_sub'] = $total_sub;
         // end of first block item section

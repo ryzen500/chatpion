@@ -286,8 +286,8 @@ foreach ($thread->getItems() as $item) {
         // $username = "ryzen1458";
         // $password = "ryzen500";
         
-        $username = "akundemo887";
-        $password = "ryzen500";
+        // $username = "akundemo887";
+        // $password = "ryzen500";
         
 
 //         $username = "akundemo888";
@@ -1030,6 +1030,21 @@ $response = $connection->get('direct_messages/events/list', ["count" => 400]);
         foreach($conversations['data'] as $key=>$value)
         {
             if(!is_null($show_after_this_index) && $key<=$show_after_this_index) continue;
+
+            
+        if ($id != NULL) {
+            # code...
+            $data = array (
+                'id'=>$value['id'], 
+                'pelapor_id'=>$value['id'],
+                'tanggal'=>$value['tanggal'],
+                'nama'=>$value['nama'],
+                'nik'=>$value['nik'],
+                'phone'=>$value['phone'],
+                'pesan'=>$value['pesan']
+            );
+            $this->db->insert('whats_app_chat',$data);
+        }
 
              $created_time = $value['tanggal']." UTC";
             isset($value['from']['name']) ? $value['from']['name'] = $value['from']['name'] : $value['from']['name'] = '';
