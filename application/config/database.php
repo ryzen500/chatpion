@@ -24,7 +24,7 @@
 		   $db['otherdb']['hostname'] = "localhost";
            $db['otherdb']['username'] = "root";
            $db['otherdb']['password'] = "";
-           $db['otherdb']['database'] = "disdukcapil-chatbot";
+           $db['otherdb']['database'] = "cdr";
            $db['otherdb']['dbdriver'] = "mysqli";
            $db['otherdb']['dbprefix'] = "";
            $db['otherdb']['pconnect'] = FALSE;

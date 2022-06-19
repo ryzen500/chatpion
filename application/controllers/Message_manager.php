@@ -247,6 +247,95 @@ foreach ($thread->getItems() as $item) {
         
     }
 
+
+    public function get_pages_conversation_yaestar()
+    {
+        $this->ajax_check();
+        $page_table_id = $this->input->post('page_table_id',true);
+
+        
+   
+        $where['where'] = array(
+            'user_id' => $this->user_id,
+            'facebook_rx_fb_user_info_id' => $this->session->userdata('facebook_rx_fb_user_info'),
+            'bot_enabled' => '1',
+            'id' => $page_table_id
+            );
+        $select = array('id','page_name','page_profile','page_id');
+        // $select = array('id','page_name','page_profile','page_id as fb_page_id');
+
+        $page_list = $this->basic->get_data('facebook_rx_fb_page_info',$where,$select,'','','', $order_by='page_name asc');
+
+        // if(empty($page_list))
+        // {
+        //     echo '<br><div class="alert alert-danger text-center w-100"><b class="m-0">'.$this->lang->line("You do not have any bot enabled page").'</b></div>';
+        //     exit();
+        // }
+
+        $user_info = $this->basic->get_data('users',array('where'=>array('id'=>$this->user_id)));
+        if(isset($user_info[0]['time_zone']) && $user_info[0]['time_zone'] != '')
+            date_default_timezone_set($user_info[0]['time_zone']);
+
+            
+// $consumer_key = "upB4rDa30tmM2rpJRFLcTQRzi";
+// $consumer_secret = "9gzdKxxjgbkN8FOsEa1apLtOs1jehcuyQthpUFNRWs4Q3k6loA";
+// $access_token = "1534821335574388736-4TRtMmMKcnTJpfEv9xCCDNVOHna1M8";
+// $access_token_secret = "bh6cjSizEtJmyU06y7pkK9mWLbJbIlSRKtXywW7UBE9GG";
+// $bearer_token = "AAAAAAAAAAAAAAAAAAAAADYjdgEAAAAAvt7IoiMUFmUbIKc%2BMZM2VYA%2FPlk%3DabSENs97CNSdqvcMzZObzNTt4ZYBnpLYbcNyPGuZReTmRsO8WJ";
+
+// $connection = new TwitterOAuth($consumer_key, $consumer_secret, $access_token, $access_token_secret);
+// $response = $connection->get('direct_messages/events/list', ["count" => 400]);
+        //  $response= $this->messenger_sync_page_messages($page_table_id,"ig");
+        
+        $db2 =$this->load->database('otherdb',TRUE);
+
+     $db2->group_by("src");
+     $db2->where('date_format(datetime,"%Y-%m-%d")', 'CURDATE()', FALSE);
+
+     $response = $db2->get('cdr_202206')->result_array();
+
+    //  var_dump($response);
+        // $response="";
+     //   $response= "Ini adalah Halaman Twitter";
+
+     //var_dump($response);
+        // $this->load->library("Instagram");
+
+
+        // $response=$this->Instagram->direct->getInbox($this->input->post('cursor_id',true),10);
+
+
+        if(isset($response['error']))
+        {
+            echo '<br><div class="alert alert-danger text-center w-100"><b class="m-0">'.$response['error_message'].'</b></div>';
+            exit();
+        }
+        else 
+        foreach($response as $r){
+	
+            $rand = rand(1,4);
+            $default = base_url('assets/img/avatar/avatar-'.$rand.'.png');	
+        
+        if ($r['src'] != NULL) {
+            # code...
+            
+            
+		$str='
+		<li class="media py-2 my-0 px-4 open_conversation"style="cursor:pointer" data-id="'.$r['src'].'">
+			<img alt="image" class="mr-3 rounded-circle border" width="50" height="50" src="'.$default.'">
+			<div class="media-body">
+			  <div class="mt-0 mb-1 font-weight-bold text-primary">'.$r['src'].'<span class="badge badge-danger badge-pill ml-2 px-2 py-1 d-none">2</span></div>
+			  <div class="text-small font-600-bold"><i class="fas fa-circle text-success pb-1" style="font-size:8px"></i> '.$r['src'].'</div>
+			</div>
+		</li>';
+
+        echo $str;
+        }    
+    }       
+        
+    }
+
+
     public function get_post_conversation_instagram()
     {
         $this->ajax_check();
@@ -696,6 +785,40 @@ error_reporting(0);
         $this->_viewcontroller($data);
     }
 
+    public function yaestar_message_dashboard()
+    {
+        if($this->session->userdata('selected_global_media_type') == 'ig') {
+            redirect('message_manager/instagram_message_dashboard');
+        }
+        $page_table_id = '';
+        if($this->session->userdata('selected_global_page_table_id')) {
+            $page_table_id = $this->session->userdata('selected_global_page_table_id');
+        }
+        $page_info = $this->basic->get_data("facebook_rx_fb_page_info",array("where"=>array("facebook_rx_fb_user_info_id"=>$this->session->userdata("facebook_rx_fb_user_info"),'bot_enabled'=>'1')),array('page_name','id','bot_enabled','has_instagram','insta_username'));
+        
+        $data['page_info'] = $page_info;
+
+        if($page_table_id == '') {
+            $page_table_id = $page_info[0]['id'] ?? 0;
+        }
+
+        $page_data = $this->basic->get_data("facebook_rx_fb_page_info",array("where"=>array("id"=>$page_table_id)),"id,page_name,insta_username,page_id");
+        // if(!isset($page_data[0])) exit();
+
+        $page_id = $page_data[0]['page_id'] ?? '';
+        $page_name = $page_data[0]['page_name'] ?? '';
+
+        $data['page_name'] =  "<a href='https://facebook.com/".$page_id."'>".$page_name."</a>";
+
+        $data['body'] = 'message_manager/yaestar_message_dashboard';
+        $data['page_title'] = $page_name.' - '.$this->lang->line('Yaestar Record');
+        $data['page_table_id'] = $page_table_id;
+        $data['tag_list'] = $this->get_broadcast_tags();
+        $data['postback_list'] = $page_table_id>0 ? $this->get_dropdown_postback($page_table_id,'fb') : [];
+        
+        $this->_viewcontroller($data);
+    }
+
     public function get_selected_page_data()
     {
         // code...
@@ -1072,6 +1195,156 @@ $response = $connection->get('direct_messages/events/list', ["count" => 400]);
         echo $str;
     }
    
+    public function get_post_conversation_yaestar()
+    {
+        $this->ajax_check();
+        error_reporting(0);
+
+        // for time zone checking
+        $where = array();
+        $where['where'] = array(
+            'user_id' => $this->user_id,
+            'facebook_rx_fb_user_info_id' => $this->session->userdata('facebook_rx_fb_user_info')
+            );
+
+        $from_user_id = $this->input->post('from_user_id',true);
+        $thread_id = $this->input->post('thread_id',true);
+        $page_table_id = $this->input->post('page_table_id',true);
+        $last_message_id = $this->input->post('last_message_id',true);  
+        $id = $this->input->post('id',true);
+        $data_id = $this->input->post('data-id',true);
+        $page_info = $this->basic->get_data('facebook_rx_fb_page_info',array('where'=>array('id'=>$page_table_id)));
+
+
+        //$post_access_token = $page_info[0]['page_access_token'];
+       // $page_name = $page_info[0]['page_name'];
+
+        
+        // $conversations = $this->fb_rx_login->get_messages_from_thread($thread_id,$post_access_token);
+
+//	$id = 5;
+        // $conversations = $this->fb_rx_login->get_messages_from_thread_whats_app($id);
+
+        // $this->basic->insert_data("fb_chat_data",array("user_id"=>$from_user_id,"message"=>serialize($conversations['data'])));
+
+
+
+        $db2 =$this->load->database('otherdb',TRUE);
+
+        $db2->where("src",$id);
+        $db2->where('date_format(datetime,"%Y-%m-%d")', 'CURDATE()', FALSE);
+        $db2->order_by("src",'DESC');
+        $data_chat_twitter = $db2->get('cdr_202206')->result_array();
+
+        // var_dump($data_chat_twitter);
+        
+        $db2->where("src",$id);
+        $db2->order_by("src","ASC");
+        $db2->limit(1);
+        $last_id=$db2->get('cdr_202206')->row("src");
+
+        // var_dump($data_chat_twitter);
+
+        // var_dump($this->db->last_query());
+        foreach ($conversations['events'] as $key => $value) {
+            # code...
+      
+            $data = array(
+                'id'=>NULL,
+                'recept_id' =>$value->message_create->target->recipient_id,
+                'sender_id' =>$value->message_create->sender_id,
+                'message'=>$value->message_create->message_data->text
+            );
+            $this->db->insert('twitter_chat',$data);
+
+        }
+      
+
+
+
+        // var_dump($conversations['events'][0]);
+        if(!isset($conversations['events'])) $conversations['events']=array();
+        $conversations['events']= array_reverse($conversations['events']);
+        // var_dump($conversations['events']);
+        // echo "<pre>"; print_r($conversations['data']); exit;
+
+        $lalas = $conversations['events'];
+
+
+        $show_after_this_index = NULL;
+        if(!empty($last_message_id))
+        foreach($data_chat_twitter as $key=>$value)
+        {
+            if($value['sender_id']==$last_id) {
+                $show_after_this_index = $key;
+                break;
+            }
+        }
+error_reporting(0);
+        // $str = '';
+        // var_dump($conversations['events']);
+       
+        foreach($data_chat_twitter as $key=>$value)
+        {
+            if(!is_null($show_after_this_index) && $key<=$show_after_this_index) continue;
+           
+            //  $created_time = $value['tanggal']." UTC";
+            // isset($value['from']['name']) ? $value['from']['name'] = $value['from']['name'] : $value['from']['name'] = '';
+            if($value['sender_id'] == $value['recept_id'])
+            {
+                // $str ='
+                // <div class="chat-item chat-right" style="">
+                //      <div class="chat-details mr-0 ml-0" message_id="'.$value['uniqueid'].'">
+                //         <div class="chat-text">'.chunk_split($value['disposition'], 50, '<br>').'</div>
+                //         <div class="chat-time">'.$value['uniqueid'].' </div>
+                //      </div>
+                // </div>';
+
+
+                if ($value['personalcontact'] == NULL) {
+                    # code...
+               
+             $str = '<div class="card">
+             <div class="card-header">
+             <h5>'.$value['src'].'</h5>
+             <br>
+             <span>'.$value['datetime'].'</span>
+             </div>
+             <div class="card-body">
+               <h6 class="card-title">Status Panggilan :'.$value['disposition'].'</h6>
+               <p class="card-text">Durasi Telfon : '.$value['duration'].'</p>
+               <p class="card-text">Tipe Telfon : '.$value['calltype'].'</p>
+
+               </div>
+           </div>';
+                }else {
+                    
+             $str = '<div class="card">
+        <div class="card-header">
+        <h5>'.$value['personalcontact'].'</h5>
+        <br>
+        <span>'.$value['datetime'].'</span>
+        </div>
+        
+             <div class="card-body">
+               <h5 class="card-title">'.$value['disposition'].'</h5>
+               <p class="card-text">Durasi Telfon : '.$value['duration'].'</p>
+               <p class="card-text">Tipe Telfon : '.$value['calltype'].'</p>
+
+             </div>
+           </div>';
+                }
+            }
+            
+            echo $str;
+
+        }
+    }
+   
+
+
+
+    
 
     public function get_post_conversation_twitter()
     {
