@@ -144,7 +144,8 @@ class Fb_rx_login
 
 		if($this->CI->config->item('facebook_poster_group_enable_disable') == '1' && $this->CI->is_group_posting_exist)
 			$permissions = ['email','pages_manage_posts','pages_manage_engagement','pages_manage_metadata','pages_read_engagement','pages_show_list','pages_messaging','public_profile','publish_to_groups','read_insights'];
-		else
+
+			else
 			$permissions = ['email','pages_manage_posts','pages_manage_engagement','pages_manage_metadata','pages_read_engagement','pages_show_list','pages_messaging','public_profile','read_insights'];
 
 		// if($this->CI->basic->is_exist("add_ons",array("project_id"=>41)))
@@ -893,6 +894,22 @@ class Fb_rx_login
 	
 	public function get_messages_from_thread_pelapor(){
 		$url= "http://lewatwa.disdukcapilsurabaya.id/api/getUserList";
+		$results = $this->run_curl_for_fb($url);
+		$results=json_decode($results,true);
+		return $results;
+	}
+
+
+	public function get_grafik_mmessage_whatsapp(){
+		$url= "http://lewatwa.disdukcapilsurabaya.id/api/getUserTotalChat";
+		$results = $this->run_curl_for_fb($url);
+		$results=json_decode($results,true);
+		return $results;
+	}
+
+
+	public function get_messages_from_thread_count(){
+		$url= "http://lewatwa.disdukcapilsurabaya.id/api/getAllUserChatCount";
 		$results = $this->run_curl_for_fb($url);
 		$results=json_decode($results,true);
 		return $results;

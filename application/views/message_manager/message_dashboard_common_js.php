@@ -39,7 +39,7 @@
           clearInterval(auto_refresh_con);
           auto_refresh_con = setInterval(function(){$('.open_conversation.bg-light').click();},refresh_interval);
         });
-        // setInterval(function(){$('#refresh_data').click();},180015);
+        setInterval(function(){$('#refresh_data').click();},18000);
         ajax_call(".open_conversation:first");
      }, 500);
     

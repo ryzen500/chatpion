@@ -1,7 +1,7 @@
 <?php $config = array (
   'default_page_url' => 'page/blank',
-  'product_name' => 'ChatPion',
-  'product_short_name' => 'ChatPion',
+  'product_name' => 'Sayangku',
+  'product_short_name' => 'Sayangku',
   'product_version' => '8.0.8',
   'slogan' => 'All-in-one Digital Marketing Platform',
   'institute_address1' => 'Prima',

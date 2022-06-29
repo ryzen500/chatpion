@@ -13,7 +13,7 @@
         $(document).ready(function () {
           
           var base_url="<?php echo base_url(); ?>";
-          var get_post_conversation_url = 'get_post_conversation';
+          var get_post_conversation_url = 'get_post_conversation_instagram_view';
             dataSource = new kendo.data.DataSource({
               transport: {
                 read: {
@@ -38,10 +38,11 @@
                     // pesan: { editable: false },
                     // tanggal: { editable: false },
                     // nama: { editable: false },
-                    id: { editable: false, nullable: true },
-                    name: { editable: false },
+                    user_id: { editable: false, nullable: true },
                     message: { editable: false },
-                    created_time: { editable: false },
+                    timestamp: { editable: false },
+                    status: { editable: false },
+
                     // nama: { editable: false },
                     // nik: { type: "number" },
                     // phone: { type: "number" }
@@ -66,25 +67,41 @@
             toolbar: ["excel", "pdf", "search"],
             columns: [
               {
-                field: "name",
-                title: "Nama",
-                width: 105
+                field: "user_id",
+                title: "Pengirim ID",
+                width: 300
               },
-
               {
                 field: "message",
                 title: "Pesan",
                 width: 105
               },
               {
-                field: "created_time",
+                field: "timestamp",
                 title: "Waktu",
                 width: 105
               },
+              {
+                field: "status",
+                title: "Status Pesan",
+                width: 105
+              },
+              { template: "<button id='jawab' class='k-button k-button-md k-rounded-md k-button-solid k-button-solid-base customEdit'><span class='k-button-text'>Jawab</span></button>", title:"Action",            
+              }
              
             ],
           });
         });
+
+
+        $(document).on('click', '#jawab', function(e){
+          var base_url="<?php echo base_url(); ?>";
+
+  // console.log("Hello World");
+  window.location.href= base_url + "message_manager/instagram_message_dashboard";
+  return false;
+});
+
       </script>
 
       <style type="text/css">

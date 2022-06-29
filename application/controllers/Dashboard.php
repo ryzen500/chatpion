@@ -112,13 +112,52 @@ class Dashboard extends Home
 
     //    var_dump($items['data']);
        
-       $itemsChat = $this->db->count_all('whats_app_chat');
+       $itemsChat = $this->fb_rx_login->get_messages_from_thread_count();
 
+    //    var_dump($itemsChat[0]['total_chat_user']);
     //    var_dump($itemsChat);
-       $igsubs=$itemsChat;
-    //    var_dump(sizeof($items));
+       $whatsapp=$itemsChat[0]['total_chat_user'];
+
+    //    $InstagramChat = $this->db->count_all('whats_app_chat');
+       $igsubs=$this->db->count_all('instagram_chat');
+
+       //    var_dump(sizeof($items));
     $fbsubs = count($items['data']);
-        // var_dump($this->db->last_query());
+    $lalas = $this->db->count_all('fb_chat_data');
+    // var_dump($fbsub);
+
+    
+    $this->db->count_all('twitter_chat');
+    $this->db->where('status','Answer');
+
+    $twitChatAnswer = $this->db->get('twitter_chat')->result_array();
+    
+$twitChatAnswers = sizeof($twitChatAnswer);
+
+
+
+$this->db->count_all('twitter_chat');
+$this->db->where('status','jawaban Petugas');
+
+$twitEmployeeAnswers = $this->db->get('twitter_chat')->result_array();
+
+$twitEmployeeAnswerss = sizeof($twitEmployeeAnswers);
+
+
+
+    
+$this->db->count_all('twitter_chat');
+$this->db->where('status','No Answer');
+
+$twitChatNoAnswer = $this->db->get('twitter_chat')->result_array();
+
+$twitChatNoAnswers = sizeof($twitChatNoAnswer);
+
+
+
+    $twitChat = $this->db->count_all('twitter_chat');
+
+    // var_dump($this->db->last_query());
 
             if(count($subscriber_info) == 1 || count($subscriber_info) > 1) {
                 $fbsub = $subscriber_info[0]['fbsub'] ?? 0;
@@ -141,8 +180,19 @@ class Dashboard extends Home
             }
             // this section is for circle chart under different subscriber source
 
-            $data['fbsub'] = $fbsubs;
+            $data['fbsub'] = $lalas;
+            $data['fbsubs'] = $fbsubs;
+            $data['answersChat']=$twitChatAnswers;
+            $data['answersNoChat']=$twitChatNoAnswers;
+
+
+            $data['petugas']=$twitEmployeeAnswerss;
+
+            $data['twitchats']= $twitChat;
+
             $data['igsub'] = $igsubs;
+            $data['whatsapp'] = $whatsapp;
+
             $data['esub'] = $esub;
             $data['total_sub'] = $total_sub;
         // end of first block item section
@@ -301,22 +351,36 @@ class Dashboard extends Home
             $data['top_products'] = $this->basic->get_data("ecommerce_cart_item",array("where"=>array("user_id"=>$user_id,"ecommerce_cart_item.updated_at >="=>$days_30_before,"ecommerce_cart_item.updated_at <="=>$today)),$select_top_product,$join_cart_items,$limit='10',$start=NULL,$order_by='sales_count desc',$group_by='ecommerce_cart_item.product_id');
         // end Fourth Section (ecommerce total Earning Graphical)
 
+
+        $month_name_array = $this->db->query("SELECT `user_id`,COUNT(`user_id`) as user FROM instagram_chat GROUP BY `user_id`")->result_array();
+        $twitter_grafik = $this->db->query("SELECT `sender_id`,COUNT(`sender_id`) as sender FROM twitter_chat GROUP BY `sender_id`; ")->result_array();
+
+        $whatsapp_grafik = $this->fb_rx_login->get_grafik_mmessage_whatsapp(); 
+
+        // var_dump($whatsapp_grafik);
+
+        // var_dump($month_name_array);
+
         // Fifth Item section (Subscribers combined chart section 12 months)
-            $month_name_array = array(
-                '12' => 'December',
-                '11' => 'November',
-                '10' => 'October',
-                '9' => 'September',
-                '8' => 'August',
-                '7' => 'July',
-                '6' => 'June',
-                '5' => 'May',
-                '4' => 'April',
-                '3' => 'March',
-                '2' => 'February',
-                '1' => 'January',
-            );
+            // $month_name_array = array(
+            //     '12' => 'December',
+            //     '11' => 'November',
+            //     '10' => 'October',
+            //     '9' => 'September',
+            //     '8' => 'August',
+            //     '7' => 'July',
+            //     '6' => 'June',
+            //     '5' => 'May',
+            //     '4' => 'April',
+            //     '3' => 'March',
+            //     '2' => 'February',
+            //     '1' => 'January',
+            // );
             $data['last_tweleve_month'] = $month_name_array;
+
+            $data['twitter_grafik'] = $twitter_grafik;
+
+            $data['whatsapp_grafik']= $whatsapp_grafik;
 
             $total_subscribers = [];
             $email_subscribers = [];

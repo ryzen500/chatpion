@@ -2,7 +2,7 @@
 
   var base_url="<?php echo base_url(); ?>";
   var loading = '<br><div class="col-12 text-center waiting previewLoader"><i class="fas fa-spinner fa-spin blue text-center" style="font-size: 60px; margin-top: 100px; margin-bottom: 100px;"></i></div>';
-  var refresh_interval = 10000;
+  var refresh_interval = 1000;
   var auto_refresh_con = '';
 
   function openTab(url) {
@@ -133,6 +133,8 @@
       var from_user_id = $(this).attr('from_user_id');
       var reply_message = $("#reply_message").val().trim();
       var message_tag = $("#message_tag").val().trim();
+      var last_message_id  =  $(".card-body .chat-item:last .chat-details").attr('message_id');
+console.log(last_message_id);
       
       if(reply_message == '')
       {
@@ -144,7 +146,7 @@
       $.ajax({
           url:base_url+'message_manager/'+reply_to_conversation_url,
           type:'POST',
-          data:{page_table_id:page_table_id,reply_message:reply_message,from_user_id:from_user_id,message_tag:message_tag},
+          data:{page_table_id:page_table_id,reply_message:reply_message,from_user_id:from_user_id,message_tag:message_tag,last_message_id:last_message_id},
           success:function(response){
             $("#conversation_modal_body").append(response);
             $("#final_reply_button").removeClass('disabled');

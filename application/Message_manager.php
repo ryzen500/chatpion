@@ -2,8 +2,11 @@
      declare(strict_types=1);
 require_once("Home.php"); // loading home controller
 
-require APPPATH.'..\ci\vendor\abraham\twitteroauth\autoload.php';
-require APPPATH.'..\ci\vendor\autoload.php';
+require APPPATH.'../ci/vendor/abraham/twitteroauth/autoload.php';
+require APPPATH.'../ci/vendor/autoload.php';
+
+
+
 
 use Instagram\SDK\Instagram;
 use Instagram\SDK\Response\DTO\Direct\Thread;
@@ -72,38 +75,6 @@ class message_manager extends Home
         $this->_viewcontroller($data);
     }
 
-    public function instagram_message_dashboard_view()
-    {  
-        // if($this->session->userdata('selected_global_media_type') == 'fb') {
-        //     redirect('message_manager/message_dashboard');
-        // }
-
-        $page_table_id = '';
-        if($this->session->userdata('selected_global_page_table_id') != '') {
-            $page_table_id = $this->session->userdata('selected_global_page_table_id');
-        }
-
-        $page_info = $this->basic->get_data("facebook_rx_fb_page_info",array("where"=>array("facebook_rx_fb_user_info_id"=>$this->session->userdata('facebook_rx_fb_user_info'),'bot_enabled'=>'1','has_instagram'=>'1')),array('page_name','id','bot_enabled','has_instagram','insta_username'));
-        
-        $data['page_info'] = $page_info;
-
-        if($page_table_id == '') $page_table_id = isset($page_info[0]['id']) ? $page_info[0]['id']:0;
-
-        $page_data = $this->basic->get_data("facebook_rx_fb_page_info",array("where"=>array("id"=>$page_table_id)),"page_name,insta_username,page_id");
-        // if(!isset($page_data[0])) exit();
-
-        $insta_username = $page_data[0]['insta_username'] ?? '';
-
-        $data['page_name'] =  "<a href='https://instagram.com/".$insta_username."'>".$insta_username."</a>";
-
-        $data['body'] = 'message_manager/instagram_message_dashboard_view';
-        $data['page_title'] = $insta_username.' - '.$this->lang->line('Instagram Live Chat');
-        $data['page_table_id'] = $page_table_id;        
-        $data['tag_list'] = $this->get_broadcast_tags('ig');
-        $data['postback_list'] = $page_table_id>0 ? $this->get_dropdown_postback($page_table_id,'ig') : [];
-        $this->_viewcontroller($data);
-    }
-
     public function get_pages_conversation_instagram()
     {
         $this->ajax_check();
@@ -121,85 +92,81 @@ class message_manager extends Home
 
 // $username = "akundemo887";
 // $password = "ryzen500";
-// $name_ig="akundemo887";
 
 
 // $username = "akundemo79";
 // $password = "ryzen500";
 
         
-$username="lili.s3150";
+// $username="lili.s3150";
 // $username="hello_world.192";
-$password="ryzen500";
-$name_ig="lili.s3150";
+// $password="ryzen500";
 
 // $username = "akundemo888";
 // $password = "ryzen500";
-$content = @file_get_contents($name_ig);
-if($content){
-    $session = @unserialize($content);
-    $instagram = Instagram::builder()
-        ->setSession($session)
-        ->build();
-}else{
-    $instagram = Instagram::builder()->build();
-    $response = $instagram->login($username, $password);
-    $session = $response->getSession();
-    file_put_contents($session->getUser()->getUsername(), serialize($session));
 
-}
+// Authenticate
+$instagram = Instagram::builder()->build();
+$response = $instagram->login($username, $password);
+
+// Retrieve the session for the authenticated user
+$session = $response->getSession();
+
+// Persist to session to a local file (or database, cache, session)
+file_put_contents($session->getUser()->getUsername(), serialize($session));
+
+// Restore the session from local file
+$session = unserialize(file_get_contents($session->getUser()->getUsername()));
+
+// Initialize a new instance of the instagram library
+$instagram = Instagram::builder()
+    ->setSession($session)
+    ->build();
+
 
 $response = $instagram->inbox();
 $inbox = $response->getInbox();
 
+// Retrieve the first thread in the inbox
 if (!$thread = current($inbox->getThreads())) {
+    // No thread found
     return;
 }
 
+// var_dump($thread);
+// die();
+// Retrieve the whole thread including thread items
 $thread = $thread->whole()->getThread();
 
+// Retrieve the available threads
+// $thread = $inbox->getThreads();
+
 foreach ($thread->getItems() as $item) {
+    // Check whether the item is of type media
     if ($item->isItemType(ItemType::MEDIA)) {
+        // Retrieve the images
         $images = $item->getMedia()->getImages()->getCandidates();
 
         foreach ($images as $image) {
-            var_dump($image->getUrl());
+            // Output the image url
+            // var_dump($image->getUrl());
         }
     }else{
-        // var_dump($item->getText());
+        // var_dump($item->getText(),$item->getTimestamp(),$item->getUserId());
 
-        if ($item->getUserId() == "53490449828") {
-            # code...
-            $data = array(
-                'id'=>NULL,
-                'threadId'=>$thread->getThreadId(),
-                'user_id'=>$item->getUserId(),
-                'timestamp'=>date("d M Y H:i:s",(int) $item->getTimestamp()),
-                'message'=>$item->getText(),
-                'status'=>"Jawaban Petugas"
-            );
-            $this->db->where('threadId',$thread->getThreadId());
-            $this->db->where('message',$item->getText());
-           $data_validation= $this->db->get('instagram_chat')->row();
-       if ($data_validation == NULL|| $data_validation == false) {
-        $this->db->insert('instagram_chat',$data);
-     # code...
-    }
-        }
         $data = array(
             'id'=>NULL,
             'threadId'=>$thread->getThreadId(),
             'user_id'=>$item->getUserId(),
             'timestamp'=>date("d M Y H:i:s",(int) $item->getTimestamp()),
-            'message'=>$item->getText(),
-            'status'=>"No Answer"
+            'message'=>$item->getText()
         );
 
         $this->db->where('threadId',$thread->getThreadId());
         $this->db->where('message',$item->getText());
        $data_validation= $this->db->get('instagram_chat')->row();
 
-    //    var_dump($data_validation);
+       var_dump($data_validation);
        if ($data_validation == NULL|| $data_validation == false) {
            $this->db->insert('instagram_chat',$data);
         # code...
@@ -261,26 +228,26 @@ foreach ($thread->getItems() as $item) {
         else 
         foreach($response as $r){
 	
-            $rand = rand(1,4);
-            $default = base_url('assets/img/avatar/avatar-'.$rand.'.png');	
+        //     $rand = rand(1,4);
+        //     $default = base_url('assets/img/avatar/avatar-'.$rand.'.png');	
         
-        if ($r['user_id'] != "1534821335574388736") {
-            # code...
+        // if ($r['user_id'] != "1534821335574388736") {
+        //     # code...
             
             
-		$str='
-		<li class="media py-2 my-0 px-4 open_conversation"style="cursor:pointer" thread_id="'.$r['threadId'].'" data-id="'.$r['user_id'].'">
-			<img alt="image" class="mr-3 rounded-circle border" width="50" height="50" src="'.$default.'">
-			<div class="media-body">
-			  <div class="mt-0 mb-1 font-weight-bold text-primary">'.$r['user_id'].'<span class="badge badge-danger badge-pill ml-2 px-2 py-1 d-none">2</span></div>
-			  <div class="text-small font-600-bold"><i class="fas fa-circle text-success pb-1" style="font-size:8px"></i> '.$r['user_id'].'</div>
-			</div>
-		</li>';
+		// $str='
+		// <li class="media py-2 my-0 px-4 open_conversation"style="cursor:pointer" data-id="'.$r['user_id'].'">
+		// 	<img alt="image" class="mr-3 rounded-circle border" width="50" height="50" src="'.$default.'">
+		// 	<div class="media-body">
+		// 	  <div class="mt-0 mb-1 font-weight-bold text-primary">'.$r['user_id'].'<span class="badge badge-danger badge-pill ml-2 px-2 py-1 d-none">2</span></div>
+		// 	  <div class="text-small font-600-bold"><i class="fas fa-circle text-success pb-1" style="font-size:8px"></i> '.$r['user_id'].'</div>
+		// 	</div>
+		// </li>';
 
-        echo $str;
-        }    
+        // echo $str;
+        // }    
     }       
-    // echo json_encode($response);
+    echo json_encode($response);
         
     }
 
@@ -373,7 +340,7 @@ foreach ($thread->getItems() as $item) {
     }
 
 
-    public function get_post_conversation_instagram_view()
+    public function get_post_conversation_instagram()
     {
         $this->ajax_check();
         // error_reporting(0);
@@ -417,9 +384,8 @@ foreach ($thread->getItems() as $item) {
         // $name_ig = "akundemo_79";
         
 
-//         $username = "akundemo887";
+//         $username = "akundemo888";
 // $password = "ryzen500";
-// $name_ig = "akundemo887";
 
         // $username="hello_world.192";
         $username="lili.s3150";
@@ -467,9 +433,8 @@ foreach ($thread->getItems() as $item) {
                     'id'=>NULL,
                     'threadId'=>$thread->getThreadId(),
                     'user_id'=>$item->getUserId(),
-                    'timestamp'=>date("d M  H:i:s",(int) $item->getTimestamp()),
-                    'message'=>$item->getText(),
-                    'status'=>"No Answer"
+                    'timestamp'=>date("d M Y H:i:s",(int) $item->getTimestamp()),
+                    'message'=>$item->getText()
                 );
         
                 $this->db->where('threadId',$thread->getThreadId());
@@ -483,12 +448,11 @@ foreach ($thread->getItems() as $item) {
                }
     }
 }
-
-             $this->db->group_by("user_id");
         // $this->db->where("user_id",$id);
         $this->db->order_by("id",'ASC');
         $data_chat_twitter = $this->db->get('instagram_chat')->result_array();
 
+        
         // $this->db->where("user_id",$id);
         $this->db->order_by("id","ASC");
         $this->db->limit(1);
@@ -568,202 +532,7 @@ foreach ($thread->getItems() as $item) {
         $lalas = (array) $data_chat_twitter;
         echo json_encode($lalas);
     }
-  
-public function get_post_conversation_instagram()
-{
-    $this->ajax_check();
-    // error_reporting(0);
-
-    // for time zone checking
-    $where = array();
-    $where['where'] = array(
-        'user_id' => $this->user_id,
-        'facebook_rx_fb_user_info_id' => $this->session->userdata('facebook_rx_fb_user_info')
-        );
-
-    $from_user_id = $this->input->post('from_user_id',true);
-    $thread_id = $this->input->post('thread_id',true);
-    $page_table_id = $this->input->post('page_table_id',true);
-    $last_message_id = $this->input->post('last_message_id',true);  
-    $id = $this->input->post('id',true);
-    $data_id = $this->input->post('data-id',true);
-    $page_info = $this->basic->get_data('facebook_rx_fb_page_info',array('where'=>array('id'=>$page_table_id)));
-
-
-    //$post_access_token = $page_info[0]['page_access_token'];
-   // $page_name = $page_info[0]['page_name'];
-
-    
-    // $conversations = $this->fb_rx_login->get_messages_from_thread($thread_id,$post_access_token);
-
-//	$id = 5;
-    // $conversations = $this->fb_rx_login->get_messages_from_thread_whats_app($id);
-
-    // $this->basic->insert_data("fb_chat_data",array("user_id"=>$from_user_id,"message"=>serialize($conversations['data'])));
-
-
-    // $username = "testers284";
-    // $password = "ryzen500";
-        
-    // $username = "ryzen1458";
-    // $password = "ryzen500";
-    
-    // $username = "akundemo_79";
-    // $password = "ryzen500";
-    // $name_ig = "akundemo_79";
-    
-
-//     $username = "akundemo887";
-// $password = "ryzen500";
-// $name_ig = "akundemo887";
-
-    // $username="hello_world.192";
-    $username="lili.s3150";
-    $password="ryzen500";
-    $name_ig="lili.s3150";
-
-
-    // $username="akundemo79";
-    // $password="ryzen500";
-
-    // Authenticate
-    $content = @file_get_contents($name_ig);
-if($content){
-$session = @unserialize($content);
-$instagram = Instagram::builder()
-    ->setSession($session)
-    ->build();
-}else{
-$instagram = Instagram::builder()->build();
-$response = $instagram->login($username, $password);
-$session = $response->getSession();
-file_put_contents($name_ig, serialize($session));
-
-}
-
-$response = $instagram->inbox();
-$inbox = $response->getInbox();
-
-if (!$thread = current($inbox->getThreads())) {
-return;
-}
-
-$thread = $thread->whole()->getThread();
-
-foreach ($thread->getItems() as $item) {
-if ($item->isItemType(ItemType::MEDIA)) {
-    $images = $item->getMedia()->getImages()->getCandidates();
-
-    foreach ($images as $image) {
-        var_dump($image->getUrl());
-    }
-}else{
-    // var_dump($item->getText());
-    $data = array(
-                'id'=>NULL,
-                'threadId'=>$thread->getThreadId(),
-                'user_id'=>$item->getUserId(),
-                'timestamp'=>date("d M  H:i:s",(int) $item->getTimestamp()),
-                'message'=>$item->getText()
-            );
-    
-            $this->db->where('threadId',$thread->getThreadId());
-            $this->db->where('message',$item->getText());
-           $data_validation= $this->db->get('instagram_chat')->row();
-    
-        //    var_dump($data_validation);
-           if ($data_validation == NULL|| $data_validation == false) {
-               $this->db->insert('instagram_chat',$data);
-            # code...
-           }
-}
-}
-    // $this->db->where("user_id",$id);
-    $this->db->where("threadId",$thread_id);
-    $this->db->order_by("id",'DESC');
-    $data_chat_twitter = $this->db->get('instagram_chat')->result_array();
-
-    
-    // $this->db->where("user_id",$id);
-    $this->db->order_by("id","ASC");
-    $this->db->limit(1);
-    $last_id=$this->db->get('instagram_chat')->row("id");
-
-    // var_dump($data_chat_twitter);
-
-    // var_dump($this->db->last_query());
-    // foreach ($conversations['events'] as $key => $value) {
-    //     # code...
-  
-    //     $data = array(
-    //         'id'=>NULL,
-    //         'recept_id' =>$value->message_create->target->recipient_id,
-    //         'sender_id' =>$value->message_create->sender_id,
-    //         'message'=>$value->message_create->message_data->text
-    //     );
-    //     $this->db->insert('twitter_chat',$data);
-
-    // }
-  
-
-
-
-    // var_dump($conversations['events'][0]);
-    if(!isset($conversations['events'])) $conversations['events']=array();
-    $conversations['events']= array_reverse($conversations['events']);
-    // var_dump($conversations['events']);
-    // echo "<pre>"; print_r($conversations['data']); exit;
-
-    $lalas = $conversations['events'];
-
-
-    $show_after_this_index = NULL;
-    if(!empty($last_message_id))
-    foreach($data_chat_twitter as $key=>$value)
-    {
-        if($value['user_id']==$last_id) {
-            $show_after_this_index = $key;
-            break;
-        }
-    }
-// error_reporting(0);
-    // $str = '';
-    // var_dump($conversations['events']);
    
-    foreach($data_chat_twitter as $key=>$value)
-    {
-        // var_dump($key);
-        if(!is_null($show_after_this_index) && $key<=$show_after_this_index) continue;
-     
-        //  $created_time = $value['tanggal']." UTC";
-        // isset($value['from']['name']) ? $value['from']['name'] = $value['from']['name'] : $value['from']['name'] = '';
-        if($value['user_id'] =="54034537193")
-        {
-            $str ='
-            <div class="chat-item chat-right" style="">
-                 <div class="chat-details mr-0 ml-0" message_id="'.$value['threadId'].'">
-                    <div class="chat-text">'.chunk_split($value['message'], 50, '<br>').'</div>
-                    <div class="chat-time">'.$value['user_id'].' </div>
-                 </div>
-            </div>';
-        }
-        else
-        {
-            $str='
-            <div class="chat-item chat-left" style="">
-                 <div class="chat-details mr-0 ml-0" message_id="'.$value['threadId'].'">
-                    <div class="chat-text">'.chunk_split($value['message'], 50, '<br>').'</div>
-                    <div class="chat-time">'.$value['user_id'].'</div>
-                 </div>
-            </div>';
-        }
-        echo $str;
-    }
-
-    // $lalas = (array) $data_chat_twitter;
-    // echo json_encode($lalas);
-}
-
 
 
     // public function get_post_conversation_instagram()
@@ -852,112 +621,65 @@ if ($item->isItemType(ItemType::MEDIA)) {
 
     public function reply_to_conversation_instagram()
     {
-        $last_message_id = $this->input->post('last_message_id',true);
-        $reply_message = $this->input->post('reply_message',true);
-
-
-$instagram = Instagram::builder()->build();
-
-
-// // Akun testing
-// $username = "akundemo888";
-// $password = "ryzen500";
-
-// $username = "akundemo887";
-// $password = "ryzen500";
-// $name_ig = "akundemo887";
-
-
-$username ="lili.s3150";
-$password ="ryzen500";
-$name_ig ="lili.s3150";
-
-// $lalas =$instagram->login($username, $password);
-
-$content = @file_get_contents($name_ig);
-if($content){
-    $session = @unserialize($content);
-    $instagram = Instagram::builder()
-        ->setSession($session)
-        ->build();
-}else{
-    $instagram = Instagram::builder()->build();
-    $response = $instagram->login($username, $password);
-    $session = $response->getSession();
-    file_put_contents($session->getUser()->getUsername(), serialize($session));
-
-}
-
-$response = $instagram->inbox();
-$inbox = $response->getInbox();
-
-if (!$thread = current($inbox->getThreads())) {
-    return;
-}
-
-$thread = $thread->whole()->getThread();
-
-foreach ($thread->getItems() as $item) {
-    if ($item->isItemType(ItemType::MEDIA)) {
-        $images = $item->getMedia()->getImages()->getCandidates();
-
-        foreach ($images as $image) {
-            var_dump($image->getUrl());
+        if($this->is_demo == '1')
+        {
+            echo "<div class='alert alert-danger text-center'>This feature is disabled in this demo.</div>"; 
+            exit();
         }
-    }else{
-        // var_dump($item->getText());
-        $response = $instagram->inbox();
+
+        $from_user_id = $this->input->post('from_user_id',true);
+        $page_table_id = $this->input->post('page_table_id',true);
+        $reply_message = $this->input->post('reply_message',true);
+        $message_tag = $this->input->post('message_tag',true);
+        if($message_tag=="") $message_tag = "HUMAN_AGENT";
+
+
+        $page_info = $this->basic->get_data('facebook_rx_fb_page_info',array('where'=>array('id'=>$page_table_id)));
+        $post_access_token = $page_info[0]['page_access_token'] ?? '';
+
+
+        $message = array
+        (
+            'recipient' =>array('id'=>$from_user_id),
+            'message'=>array('text'=>$reply_message),
+            'tag'=>$message_tag
+        );
+        $message = json_encode($message);
+
+        try
+        {            
+            $response = $this->fb_rx_login->send_non_promotional_message_subscription($message,$post_access_token);
+           
+            if(isset($response['message_id']))
+            {
+                echo
+                '<div class="chat-item chat-right" style="">
+                     <div class="chat-details mr-0 ml-0" message_id="'.$response['message_id'].'">
+                        <div class="chat-text">'.$reply_message.'</div>
+                        <div class="chat-time">'.date('d M Y H:i:s').'</div>
+                     </div>
+                </div>';
+            }
+            else 
+            {
+                if(isset($response["error"]["message"])) $message_sent_id = $response["error"]["message"];  
+                if(isset($response["error"]["code"])) $message_error_code = $response["error"]["code"]; 
+
+                if(isset($message_error_code) && $message_error_code=="368") // if facebook marked message as spam 
+                {
+                    $error_msg=$message_sent_id;
+                }
+
+                $error_msg = $message_sent_id;
+                echo "<div class='alert alert-danger text-center'>".$error_msg."</div>";
+
+            } 
+        }
+        catch(Exception $e) 
+        {
+          echo "<div class='alert alert-danger text-center'>".$e->getMessage()."</div>";
+        }
     }
-}
-
-foreach ($response->getInbox()->getThreads() as $thread) {
-    // $testers =$lalas[0]->threadId;
-    
-    // var_dump($thread);
-
-// if (condition) {
-//     # code...
-// }
-if ($thread->threadId == $last_message_id) {
-    # code...
-    $thread->sendMessage($reply_message);
-
-
-    $where = array(
-        'threadId'=>$last_message_id
-    );
-    $datas = array(
-        'status'=>'Answer'
-    );
-    $this->db->update('instagram_chat',$datas,$where);
-            // var_dump($this->db->last_query());
-
-    echo '<div class="chat-item chat-right" style="">
-    <div class="chat-details mr-0 ml-0" message_id="'.$last_message_id.'">
-       <div class="chat-text">'.$reply_message.'</div>
-       <div class="chat-time">'.date('d M Y H:i:s').'</div>
-    </div>
-</div>';
-}
-
-// echo "Gagal Kirim pesan ";
-    // $thread->sendMessage("Hello");
-}
-
-
-
-
-// var_dump($response);
-
-
-// $thread = $response->getInbox()->getThreads();
-
-// $thread->sendMessage("Hello Bro");
-// var_dump($session->getUser());
-// $id ="340282366841710300949128185190493670744";
-// $lalas = $response->getInbox()->getThreadById($id);
-
-          }
 
 
     public function message_dashboard()
@@ -987,45 +709,6 @@ if ($thread->threadId == $last_message_id) {
 
         $data['body'] = 'message_manager/message_dashboard';
         $data['page_title'] = $page_name.' - '.$this->lang->line('Facebook Live Chat');
-        $data['page_table_id'] = $page_table_id;
-        $data['tag_list'] = $this->get_broadcast_tags();
-        $data['postback_list'] = $page_table_id>0 ? $this->get_dropdown_postback($page_table_id,'fb') : [];
-        
-        $this->_viewcontroller($data);
-    }
-
-
-
-
-
-    
-    public function whatsapp_message_dashboard_view()
-    {
-        if($this->session->userdata('selected_global_media_type') == 'ig') {
-            redirect('message_manager/instagram_message_dashboard');
-        }
-        $page_table_id = '';
-        if($this->session->userdata('selected_global_page_table_id')) {
-            $page_table_id = $this->session->userdata('selected_global_page_table_id');
-        }
-        $page_info = $this->basic->get_data("facebook_rx_fb_page_info",array("where"=>array("facebook_rx_fb_user_info_id"=>$this->session->userdata("facebook_rx_fb_user_info"),'bot_enabled'=>'1')),array('page_name','id','bot_enabled','has_instagram','insta_username'));
-        
-        $data['page_info'] = $page_info;
-
-        if($page_table_id == '') {
-            $page_table_id = $page_info[0]['id'] ?? 0;
-        }
-
-        $page_data = $this->basic->get_data("facebook_rx_fb_page_info",array("where"=>array("id"=>$page_table_id)),"id,page_name,insta_username,page_id");
-        // if(!isset($page_data[0])) exit();
-
-        $page_id = $page_data[0]['page_id'] ?? '';
-        $page_name = $page_data[0]['page_name'] ?? '';
-
-        $data['page_name'] =  "<a href='https://facebook.com/".$page_id."'>".$page_name."</a>";
-
-        $data['body'] = 'message_manager/whatsapp_message_dashboard_view';
-        $data['page_title'] = $page_name.' - '.$this->lang->line('Whats App Live Chat');
         $data['page_table_id'] = $page_table_id;
         $data['tag_list'] = $this->get_broadcast_tags();
         $data['postback_list'] = $page_table_id>0 ? $this->get_dropdown_postback($page_table_id,'fb') : [];
@@ -1086,46 +769,6 @@ if ($thread->threadId == $last_message_id) {
         redirect('message_manager/twitter_message_dashboard');
 
     }
-
-
-    public function twitter_message_dashboard_view()
-    {
-        if($this->session->userdata('selected_global_media_type') == 'ig') {
-            redirect('message_manager/instagram_message_dashboard');
-        }
-        $page_table_id = '';
-        if($this->session->userdata('selected_global_page_table_id')) {
-            $page_table_id = $this->session->userdata('selected_global_page_table_id');
-        }
-        $page_info = $this->basic->get_data("facebook_rx_fb_page_info",array("where"=>array("facebook_rx_fb_user_info_id"=>$this->session->userdata("facebook_rx_fb_user_info"),'bot_enabled'=>'1')),array('page_name','id','bot_enabled','has_instagram','insta_username'));
-        
-        $account = $this->db->get('account_info')->result_array();
-        $data['page_info'] = $account;
-
-        if($page_table_id == '') {
-            $page_table_id = $page_info[0]['id'] ?? 0;
-        }
-
-        $page_data = $this->basic->get_data("facebook_rx_fb_page_info",array("where"=>array("id"=>$page_table_id)),"id,page_name,insta_username,page_id");
-        // if(!isset($page_data[0])) exit();
-
-        $page_id = $page_data[0]['page_id'] ?? '';
-        $page_name = $page_data[0]['page_name'] ?? '';
-
-        $data['page_name'] =  "<a href='https://facebook.com/".$page_id."'>".$page_name."</a>";
-
-        $data['body'] = 'message_manager/twitter_message_dashboard_view';
-        $data['page_title'] = $page_name.' - '.$this->lang->line('Twitter Chat');
-        $data['page_table_id'] = $page_table_id;
-        $data['tag_list'] = $this->get_broadcast_tags();
-        $data['postback_list'] = $page_table_id>0 ? $this->get_dropdown_postback($page_table_id,'fb') : [];
-        
-        $this->_viewcontroller($data);
-    }
-
-
-
-
     public function twitter_message_dashboard()
     {
         if($this->session->userdata('selected_global_media_type') == 'ig') {
@@ -1137,8 +780,8 @@ if ($thread->threadId == $last_message_id) {
         }
         $page_info = $this->basic->get_data("facebook_rx_fb_page_info",array("where"=>array("facebook_rx_fb_user_info_id"=>$this->session->userdata("facebook_rx_fb_user_info"),'bot_enabled'=>'1')),array('page_name','id','bot_enabled','has_instagram','insta_username'));
         
-        $account = $this->db->get('account_info')->result_array();
-        $data['page_info'] = $account;
+        // $account = $this->db->get('account_info')->result_array();
+       // $data['page_info'] = $account;
 
         if($page_table_id == '') {
             $page_table_id = $page_info[0]['id'] ?? 0;
@@ -1297,145 +940,34 @@ if ($thread->threadId == $last_message_id) {
         
     }
 
-//     public function get_pages_conversation_twitter()
-//     {
+    public function get_pages_conversation_twitter()
+    {
 
-//         $this->ajax_check();
-//         $page_table_id = $this->input->post('page_table_id',true);
-//         $where['where'] = array(
-//             'user_id' => $this->user_id,
-//             'facebook_rx_fb_user_info_id' => $this->session->userdata('facebook_rx_fb_user_info'),
-//             'bot_enabled' => '1',
-//             'id' => $page_table_id
-//             );
-//         $select = array('id','page_name','page_profile','page_id as fb_page_id');
-//         $page_list = $this->basic->get_data('facebook_rx_fb_page_info',$where,$select,'','','', $order_by='page_name asc');
+        $this->ajax_check();
+        $page_table_id = $this->input->post('page_table_id',true);
+        $where['where'] = array(
+            'user_id' => $this->user_id,
+            'facebook_rx_fb_user_info_id' => $this->session->userdata('facebook_rx_fb_user_info'),
+            'bot_enabled' => '1',
+            'id' => $page_table_id
+            );
+        $select = array('id','page_name','page_profile','page_id as fb_page_id');
+        $page_list = $this->basic->get_data('facebook_rx_fb_page_info',$where,$select,'','','', $order_by='page_name asc');
 
-//         // if(empty($page_list))
-//         // {
-//         //     echo '<br><div class="alert alert-danger text-center w-100"><b class="m-0">'.$this->lang->line("You do not have any bot enabled page").'</b></div>';
-//         //     exit();
-//         // }
+        // if(empty($page_list))
+        // {
+        //     echo '<br><div class="alert alert-danger text-center w-100"><b class="m-0">'.$this->lang->line("You do not have any bot enabled page").'</b></div>';
+        //     exit();
+        // }
 
-//         $user_info = $this->basic->get_data('users',array('where'=>array('id'=>$this->user_id)));
-//         if(isset($user_info[0]['time_zone']) && $user_info[0]['time_zone'] != '')
-//             date_default_timezone_set($user_info[0]['time_zone']);
-//       // $response= $this->messenger_sync_page_messages($page_table_id);
+        $user_info = $this->basic->get_data('users',array('where'=>array('id'=>$this->user_id)));
+        if(isset($user_info[0]['time_zone']) && $user_info[0]['time_zone'] != '')
+            date_default_timezone_set($user_info[0]['time_zone']);
+      // $response= $this->messenger_sync_page_messages($page_table_id);
 	
       
 
             
-// $consumer_key = "upB4rDa30tmM2rpJRFLcTQRzi";
-// $consumer_secret = "9gzdKxxjgbkN8FOsEa1apLtOs1jehcuyQthpUFNRWs4Q3k6loA";
-// $access_token = "1534821335574388736-4TRtMmMKcnTJpfEv9xCCDNVOHna1M8";
-// $access_token_secret = "bh6cjSizEtJmyU06y7pkK9mWLbJbIlSRKtXywW7UBE9GG";
-// $bearer_token = "AAAAAAAAAAAAAAAAAAAAADYjdgEAAAAAvt7IoiMUFmUbIKc%2BMZM2VYA%2FPlk%3DabSENs97CNSdqvcMzZObzNTt4ZYBnpLYbcNyPGuZReTmRsO8WJ";
-
-// $connection = new TwitterOAuth($consumer_key, $consumer_secret, $access_token, $access_token_secret);
-// $response = $connection->get('direct_messages/events/list', ["count" => 400]);
-//         // $response= $this->messenger_sync_page_messages($page_table_id,"ig");
-//      //   $response= "Ini adalah Halaman Twitter";
-
-//      error_reporting(0);
-//      $array = get_object_vars($response);
-//      $conversations = get_object_vars($response);
-
-
-//      $this->db->group_by("sender_id");
-//      $data_chat_twitter = $this->db->get('twitter_chat')->result_array();
-
-//      foreach ($conversations['events'] as $key => $value) {
-//         # code...
-  
-//         $data = array(
-//             'id'=>NULL,
-//             'recept_id' =>$value->message_create->target->recipient_id,
-//             'sender_id' =>$value->message_create->sender_id,
-//             'message'=>$value->message_create->message_data->text
-//         );
-        
-//         $this->db->where('sender_id',$value->message_create->sender_id);
-//         $this->db->where('message',$value->message_create->message_data->text);
-//        $data_validation= $this->db->get('twitter_chat')->row();
-//         if ($data_validation == NULL || $data_validation == false) {
-//             # code...
-//             $this->db->insert('twitter_chat',$data);
-//         }
-
-//     }
-  
-
-//     //  var_dump($array);
-//     	// $response = $this->fb_rx_login->get_messages_from_thread_pelapor(); 
-
-//         if($array['errors'])
-//         {
-//             echo '<br><div class="alert alert-danger text-center w-100"><b class="m-0">'.$array['errors'][0]->message.'</b></div>';
-//             exit();
-//         }
-//         else  
-// // $str ='';
-
-// 	foreach($data_chat_twitter as $r){
-	
-//             $rand = rand(1,4);
-//             $default = base_url('assets/img/avatar/avatar-'.$rand.'.png');	
-        
-//         if ($r['sender_id'] != "1534821335574388736") {
-//             # code...
-            
-            
-// 		$str='
-// 		<li class="media py-2 my-0 px-4 open_conversation"style="cursor:pointer" data-id="'.$r['sender_id'].'">
-// 			<img alt="image" class="mr-3 rounded-circle border" width="50" height="50" src="'.$default.'">
-// 			<div class="media-body">
-// 			  <div class="mt-0 mb-1 font-weight-bold text-primary">'.$r['sender_id'].'<span class="badge badge-danger badge-pill ml-2 px-2 py-1 d-none">2</span></div>
-// 			  <div class="text-small font-600-bold"><i class="fas fa-circle text-success pb-1" style="font-size:8px"></i> '.$r['sender_id'].'</div>
-// 			</div>
-// 		</li>';
-
-//         echo $str;
-//         }    
-//     }
-
-    
-        
-//     }
-
-
-
-
-
-
-public function get_pages_conversation_twitter()
-{
-
-    $this->ajax_check();
-    $page_table_id = $this->input->post('page_table_id',true);
-   
-$where['where'] = array(
-        'user_id' => $this->user_id,
-        'facebook_rx_fb_user_info_id' => $this->session->userdata('facebook_rx_fb_user_info'),
-        'bot_enabled' => '1',
-        'id' => $page_table_id
-        );
-    $select = array('id','page_name','page_profile','page_id as fb_page_id');
-    $page_list = $this->basic->get_data('facebook_rx_fb_page_info',$where,$select,'','','', $order_by='page_name asc');
-
-    // if(empty($page_list))
-    // {
-    //     echo '<br><div class="alert alert-danger text-center w-100"><b class="m-0">'.$this->lang->line("You do not have any bot enabled page").'</b></div>';
-    //     exit();
-    // }
-
-    $user_info = $this->basic->get_data('users',array('where'=>array('id'=>$this->user_id)));
-    if(isset($user_info[0]['time_zone']) && $user_info[0]['time_zone'] != '')
-        date_default_timezone_set($user_info[0]['time_zone']);
-  // $response= $this->messenger_sync_page_messages($page_table_id);
-
-  
-
-        
 $consumer_key = "upB4rDa30tmM2rpJRFLcTQRzi";
 $consumer_secret = "9gzdKxxjgbkN8FOsEa1apLtOs1jehcuyQthpUFNRWs4Q3k6loA";
 $access_token = "1534821335574388736-4TRtMmMKcnTJpfEv9xCCDNVOHna1M8";
@@ -1444,99 +976,74 @@ $bearer_token = "AAAAAAAAAAAAAAAAAAAAADYjdgEAAAAAvt7IoiMUFmUbIKc%2BMZM2VYA%2FPlk
 
 $connection = new TwitterOAuth($consumer_key, $consumer_secret, $access_token, $access_token_secret);
 $response = $connection->get('direct_messages/events/list', ["count" => 400]);
-    // $response= $this->messenger_sync_page_messages($page_table_id,"ig");
- //   $response= "Ini adalah Halaman Twitter";
+        // $response= $this->messenger_sync_page_messages($page_table_id,"ig");
+     //   $response= "Ini adalah Halaman Twitter";
 
- error_reporting(0);
- $array = get_object_vars($response);
- $conversations = get_object_vars($response);
-
-
- $this->db->group_by("sender_id");
- $data_chat_twitter = $this->db->get('twitter_chat')->result_array();
+     error_reporting(0);
+     $array = get_object_vars($response);
+     $conversations = get_object_vars($response);
 
 
- foreach ($conversations['events'] as $key => $value) {
-    # code...
+     $this->db->group_by("sender_id");
+     $data_chat_twitter = $this->db->get('twitter_chat')->result_array();
 
-    if ($value->message_create->sender_id == "1534821335574388736") {
+     foreach ($conversations['events'] as $key => $value) {
         # code...
+  
         $data = array(
             'id'=>NULL,
             'recept_id' =>$value->message_create->target->recipient_id,
             'sender_id' =>$value->message_create->sender_id,
-            'message'=>$value->message_create->message_data->text,
-            'status'=>'Answer'
-        );
-    
-        $this->db->where('sender_id',$value->message_create->sender_id);
-        $this->db->where('message',$value->message_create->message_data->text);
-       $data_validation= $this->db->get('twitter_chat')->row();
-        if ($data_validation == NULL || $data_validation == false) {
-            
-            # code...
-            $this->db->insert('twitter_chat',$data);
-        }
-    }else {
-        # code...
-        $data = array(
-            'id'=>NULL,
-            'recept_id' =>$value->message_create->target->recipient_id,
-            'sender_id' =>$value->message_create->sender_id,
-            'message'=>$value->message_create->message_data->text,
-            'status'=>'No Answer'
+            'message'=>$value->message_create->message_data->text
         );
         
         $this->db->where('sender_id',$value->message_create->sender_id);
         $this->db->where('message',$value->message_create->message_data->text);
        $data_validation= $this->db->get('twitter_chat')->row();
         if ($data_validation == NULL || $data_validation == false) {
-            
             # code...
             $this->db->insert('twitter_chat',$data);
         }
+
     }
-   
+  
 
-}
+    //  var_dump($array);
+    	// $response = $this->fb_rx_login->get_messages_from_thread_pelapor(); 
 
-
-//  var_dump($array);
-    // $response = $this->fb_rx_login->get_messages_from_thread_pelapor(); 
-
-    if($array['errors'])
-    {
-        echo '<br><div class="alert alert-danger text-center w-100"><b class="m-0">'.$array['errors'][0]->message.'</b></div>';
-        exit();
-    }
-    else  
+        if($array['errors'])
+        {
+            echo '<br><div class="alert alert-danger text-center w-100"><b class="m-0">'.$array['errors'][0]->message.'</b></div>';
+            exit();
+        }
+        else  
 // $str ='';
 
-foreach($data_chat_twitter as $r){
-
-        $rand = rand(1,4);
-        $default = base_url('assets/img/avatar/avatar-'.$rand.'.png');	
-    
-    if ($r['sender_id'] != "1534821335574388736") {
-        # code...
+	foreach($data_chat_twitter as $r){
+	
+            $rand = rand(1,4);
+            $default = base_url('assets/img/avatar/avatar-'.$rand.'.png');	
         
-        
-    $str='
-    <li class="media py-2 my-0 px-4 open_conversation"style="cursor:pointer" data-id="'.$r['sender_id'].'">
-        <img alt="image" class="mr-3 rounded-circle border" width="50" height="50" src="'.$default.'">
-        <div class="media-body">
-          <div class="mt-0 mb-1 font-weight-bold text-primary">'.$r['sender_id'].'<span class="badge badge-danger badge-pill ml-2 px-2 py-1 d-none">2</span></div>
-          <div class="text-small font-600-bold"><i class="fas fa-circle text-success pb-1" style="font-size:8px"></i> '.$r['sender_id'].'</div>
-        </div>
-    </li>';
+        if ($r['sender_id'] != "1534821335574388736") {
+            # code...
+            
+            
+		$str='
+		<li class="media py-2 my-0 px-4 open_conversation"style="cursor:pointer" data-id="'.$r['sender_id'].'">
+			<img alt="image" class="mr-3 rounded-circle border" width="50" height="50" src="'.$default.'">
+			<div class="media-body">
+			  <div class="mt-0 mb-1 font-weight-bold text-primary">'.$r['sender_id'].'<span class="badge badge-danger badge-pill ml-2 px-2 py-1 d-none">2</span></div>
+			  <div class="text-small font-600-bold"><i class="fas fa-circle text-success pb-1" style="font-size:8px"></i> '.$r['sender_id'].'</div>
+			</div>
+		</li>';
 
-    echo $str;
-    }    
-}
-
+        echo $str;
+        }    
+    }
 
     
-}
+        
+    }
 
     public function get_post_conversation()
     {
@@ -1555,7 +1062,7 @@ foreach($data_chat_twitter as $r){
         $last_message_id = $this->input->post('last_message_id',true);  
         
 
-        $page_info = $this->basic->get_data('facebook_rx_fb_page_info',array('where'=>array('id'=>$page_table_id)));
+       $page_info = $this->basic->get_data('facebook_rx_fb_page_info',array('where'=>array('id'=>$page_table_id)));
 
 
         $post_access_token = $page_info[0]['page_access_token'];
@@ -1566,7 +1073,7 @@ foreach($data_chat_twitter as $r){
 
         foreach($conversations['data'] as $key=>$value)
         {
-            if(!is_null($show_after_this_index) && $key<=$show_after_this_index) continue;
+           // if(!is_null($show_after_this_index) && $key<=$show_after_this_index) continue;
 
             $data = array(
                 'id'=>NULL,
@@ -1601,155 +1108,49 @@ foreach($data_chat_twitter as $r){
         {
             if(!is_null($show_after_this_index) && $key<=$show_after_this_index) continue;
 
-            // $created_time = $value['created_time']." UTC";
-            // isset($value['from']['name']) ? $value['from']['name'] = $value['from']['name'] : $value['from']['name'] = '';
-            // if($value['from']['name'] == $page_name)
-            // {
-            //     $str.='
-            //     <div class="chat-item chat-right" style="">
-            //          <div class="chat-details mr-0 ml-0" message_id="'.$value['id'].'">
-            //             <div class="chat-text">'.chunk_split($value['message'], 50, '<br>').'</div>
-            //             <div class="chat-time">'.$value['from']['name'].' @'.date('d M Y H:i:s',strtotime($created_time)).'</div>
-            //          </div>
-            //     </div>';
-            // }
-            // else
-            // {
-            //     $str.='
-            //     <div class="chat-item chat-left" style="">
-            //          <div class="chat-details mr-0 ml-0" message_id="'.$value['id'].'">
-            //             <div class="chat-text">'.chunk_split($value['message'], 50, '<br>').'</div>
-            //             <div class="chat-time">'.$value['from']['name'].' @'.date('d M Y H:i:s',strtotime($created_time)).'</div>
-            //          </div>
-            //     </div>';
-            // }
+             $created_time = $value['created_time']." UTC";
+             isset($value['from']['name']) ? $value['from']['name'] = $value['from']['name'] : $value['from']['name'] = '';
+             if($value['from']['name'] == $page_name)
+             {
+                 $str.='
+                 <div class="chat-item chat-right" style="">
+                      <div class="chat-details mr-0 ml-0" message_id="'.$value['id'].'">
+                         <div class="chat-text">'.chunk_split($value['message'], 50, '<br>').'</div>
+                         <div class="chat-time">'.$value['from']['name'].' @'.date('d M Y H:i:s',strtotime($created_time)).'</div>
+                      </div>
+                 </div>';
+             }
+             else
+             {
+                 $str.='
+                 <div class="chat-item chat-left" style="">
+                      <div class="chat-details mr-0 ml-0" message_id="'.$value['id'].'">
+                         <div class="chat-text">'.chunk_split($value['message'], 50, '<br>').'</div>
+                         <div class="chat-time">'.$value['from']['name'].' @'.date('d M Y H:i:s',strtotime($created_time)).'</div>
+                      </div>
+                 </div>';
+             }
         }
 
-        echo json_encode($data_chat_twitter);
-        // echo $str;
+       // echo json_encode($data_chat_twitter);
+         echo $str;
     }
 
-     
-    // public function get_post_conversation_whatsapp_view()
-    // {
-    //     // create curl resource 
-    //     $ch = curl_init(); 
-    //     // set url 
-    //     curl_setopt($ch, CURLOPT_URL, "http://lewatwa.disdukcapilsurabaya.id/api/getUserChatLogAll"); 
-
-    //     //return the transfer as a string 
-    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-    //     // $output contains the output string 
-    //     $output = curl_exec($ch); 
-        
-    //     // var_dump($output);
-    //     // $lalas = array($output);
-
-    //     // $str = '';
-    //     // foreach($lalas as $value)
-    //     // {
-    //     //     // if(!is_null($show_after_this_index) && $key<=$show_after_this_index) continue;
-
-
-    //     //      $created_time = $value['tanggal']." UTC";
-    //     //     // isset($value['from']['name']) ? $value['from']['name'] = $value['from']['name'] : $value['from']['name'] = '';
-    //     //     if($value['code'] == "Sys")
-    //     //     {
-    //     //         $str='
-    //     //         <div class="chat-item chat-right" style="">
-    //     //              <div class="chat-details mr-0 ml-0" message_id="'.$value['pelapor_id'].'">
-    //     //                 <div class="chat-text">'.chunk_split($value['pesan'], 50, '<br>').'</div>
-    //     //                 <div class="chat-time">'.$value['pelapor_id'].' @'.date('d M Y H:i:s',strtotime($created_time)).'</div>
-    //     //              </div>
-    //     //         </div>';
-    //     //     }
-    //     //     else
-    //     //     {
-    //     //         $str='
-    //     //         <div class="chat-item chat-left" style="">
-    //     //              <div class="chat-details mr-0 ml-0" message_id="'.$value['id'].'">
-    //     //                 <div class="chat-text">'.chunk_split($value['pesan'], 50, '<br>').'</div>
-    //     //                 <div class="chat-time">'.$value['pelapor_id'].' @'.date('d M Y H:i:s',strtotime($created_time)).'</div>
-    //     //              </div>
-    //     //         </div>';
-    //     //     }
-    //     //     echo $str;
-    //     // }
-    
-   
-
-    // }
 
     
-    public function get_post_conversation_whatsapp()
+       public function get_post_conversation_whatsapp()
     {
-        $id = $this->input->post('id',true);
-
         // create curl resource 
         $ch = curl_init(); 
         // set url 
-        curl_setopt($ch, CURLOPT_URL, "http://lewatwa.disdukcapilsurabaya.id/api/getUserChatLog/$id"); 
+        curl_setopt($ch, CURLOPT_URL, "http://lewatwa.disdukcapilsurabaya.id/api/getUserChatLogAll"); 
 
-        //return the transfer as a strinxg 
+        //return the transfer as a string 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
         // $output contains the output string 
         $output = curl_exec($ch); 
 
-        $lalas = json_decode($output);
-        // $lalas = (array) $output;
-        // print_r($lalas);
-        // $lalas= array($output);
-        
-
-
-        $str="";
-
-        // $str = '';
-        foreach($lalas as $value)
-        {
-            // var_dump($value);
-            // if(!is_null($show_after_this_index) && $key<=$show_after_this_index) continue;
-
-            foreach ($value as $v) {
-                $created_time = $v->tanggal." UTC";
-                
-                // isset($value['from']['name']) ? $value['from']['name'] = $value['from']['name'] : $value['from']['name'] = '';
-                if($v->code == "Sys")
-                {
-                    // if($value->pelapor_id == $id){
-    
-                    $str.='
-                    <div class="chat-item chat-right" style="">
-                         <div class="chat-details mr-0 ml-0" message_id="'.$v->pelapor_id.'">
-                            <div class="chat-text">'.chunk_split($v->pesan, 50, '<br>').'</div>
-                            <div class="chat-time">'.$v->pelapor_id.' @'.$created_time.'</div>
-                         </div>
-                    </div>';
-                    // }
-                }
-                else
-                {
-                    // if($value->pelapor_id == $id){
-                        $str.='
-                        <div class="chat-item chat-left" style="">
-                             <div class="chat-details mr-0 ml-0" message_id="'.$v->pelapor_id.'">
-                                <div class="chat-text">'.chunk_split($v->pesan, 50, '<br>').'</div>
-                                <div class="chat-time">'.$v->pelapor_id.' @'.$created_time.'</div>
-                             </div>
-                        </div>';
-                    // }
-                        
-                }
-                echo $str;
-                
-                # code...
-            }
-            //  $created_time = $value['tanggal']." UTC";
-            
-        }
-        
-   
-
+        print_r($output);
     }
    
     public function get_post_conversation_yaestar()
@@ -1908,19 +1309,12 @@ foreach($data_chat_twitter as $r){
 
 
 
-    public function reload_data(){
-        $this->ajax_check();
-        $this->db->truncate('twitter_chat');
-
-        // redirect('message_manager/get_post_conversation_twitter_view');
-    }
     
 
-    public function get_post_conversation_twitter_view()
+    public function get_post_conversation_twitter()
     {
-        $this->ajax_check();
-        error_reporting(0);
-
+        //$this->ajax_check();
+        //error_reporting(0);
 
         // for time zone checking
         $where = array();
@@ -1965,7 +1359,6 @@ foreach($data_chat_twitter as $r){
 
         $this->db->distinct('message','sender_id','recept_id');
         // $this->db->where("sender_id",$id);
-        $this->db->group_by("sender_id");
         $this->db->order_by("id",'DESC');
         $data_chat_twitter = $this->db->get('twitter_chat')->result_array();
 
@@ -1983,47 +1376,15 @@ foreach($data_chat_twitter as $r){
         foreach ($conversations['events'] as $key => $value) {
             # code...
       
-            if ($value->message_create->sender_id == "1534821335574388736") {
-                # code...
-                $data = array(
-                    'id'=>NULL,
-                    'recept_id' =>$value->message_create->target->recipient_id,
-                    'sender_id' =>$value->message_create->sender_id,
-                    'message'=>$value->message_create->message_data->text,
-                    'status'=>'Answer'
-                );
-                $this->db->insert('twitter_chat',$data);
-            
-               
-            }else {
-                # code...
-                
-                // $this->db->where('sender_id',$value->message_create->sender_id);
-                // //     $this->db->where('message',$value->message_create->message_data->text);
-                //    $data_validation= $this->db->get('twitter_chat')->row();
-                
-                //    if ($data_validation == NULL) {
-                       $data = array(
-                           'id'=>NULL,
-                           'recept_id' =>$value->message_create->target->recipient_id,
-                           'sender_id' =>$value->message_create->sender_id,
-                           'message'=>$value->message_create->message_data->text,
-                           'status'=>'No Answer'
-                       );
-                       
-                   //     $this->db->where('sender_id',$value->message_create->sender_id);
-                   //     $this->db->where('message',$value->message_create->message_data->text);
-                   //    $data_validation= $this->db->get('twitter_chat')->row();
-                   //     if ($data_validation == NULL || $data_validation == false) {
-                           
-                           # code...
-                           $this->db->insert('twitter_chat',$data);
-                    # code...
-                //    }
-                        // }
-                        
-                    // }
-            }
+            $data = array(
+                'id'=>NULL,
+                'recept_id' =>$value->message_create->target->recipient_id,
+                'sender_id' =>$value->message_create->sender_id,
+                'message'=>$value->message_create->message_data->text,
+                'datetime'=>$value->created_timestamp,
+            );
+            $this->db->insert('twitter_chat',$data);
+
         }
       
 
@@ -2086,188 +1447,7 @@ foreach($data_chat_twitter as $r){
         }
         echo json_encode($data_chat_twitter);
 
-    }
-   
-
-    public function get_post_conversation_twitter()
-    {
-        $this->ajax_check();
-        error_reporting(0);
-
-        // for time zone checking
-        $where = array();
-        $where['where'] = array(
-            'user_id' => $this->user_id,
-            'facebook_rx_fb_user_info_id' => $this->session->userdata('facebook_rx_fb_user_info')
-            );
-
-        $from_user_id = $this->input->post('from_user_id',true);
-        $thread_id = $this->input->post('thread_id',true);
-        $page_table_id = $this->input->post('page_table_id',true);
-        $last_message_id = $this->input->post('last_message_id',true);  
-        $id = $this->input->post('id',true);
-        $data_id = $this->input->post('data-id',true);
-        $page_info = $this->basic->get_data('facebook_rx_fb_page_info',array('where'=>array('id'=>$page_table_id)));
-
-
-        //$post_access_token = $page_info[0]['page_access_token'];
-       // $page_name = $page_info[0]['page_name'];
-
-        
-        // $conversations = $this->fb_rx_login->get_messages_from_thread($thread_id,$post_access_token);
-
-//	$id = 5;
-        // $conversations = $this->fb_rx_login->get_messages_from_thread_whats_app($id);
-
-        // $this->basic->insert_data("fb_chat_data",array("user_id"=>$from_user_id,"message"=>serialize($conversations['data'])));
-
-
-
-            
-        $consumer_key = "upB4rDa30tmM2rpJRFLcTQRzi";
-        $consumer_secret = "9gzdKxxjgbkN8FOsEa1apLtOs1jehcuyQthpUFNRWs4Q3k6loA";
-        $access_token = "1534821335574388736-4TRtMmMKcnTJpfEv9xCCDNVOHna1M8";
-        $access_token_secret = "bh6cjSizEtJmyU06y7pkK9mWLbJbIlSRKtXywW7UBE9GG";
-        $bearer_token = "AAAAAAAAAAAAAAAAAAAAADYjdgEAAAAAvt7IoiMUFmUbIKc%2BMZM2VYA%2FPlk%3DabSENs97CNSdqvcMzZObzNTt4ZYBnpLYbcNyPGuZReTmRsO8WJ";
-        
-        $connection = new TwitterOAuth($consumer_key, $consumer_secret, $access_token, $access_token_secret);
-        $response = $connection->get('direct_messages/events/list', ["count" => 400]);
-
-        $conversations = get_object_vars($response);
-
-        $this->db->distinct('message','sender_id','recept_id');
-        $this->db->where("sender_id",$id);
-        $this->db->or_where("recept_id",$id);
-        // $this->db->where("recept_id","");
-
-        $this->db->order_by("id",'DESC');
-        $data_chat_twitter = $this->db->get('twitter_chat')->result_array();
-
-        
-        $this->db->where("sender_id",$id);
-        $this->db->order_by("id","ASC");
-        $this->db->limit(1);
-        $last_id=$this->db->get('twitter_chat')->row("id");
-
-        // var_dump($data_chat_twitter);
-
-        // var_dump($this->db->last_query());
-        foreach ($conversations['events'] as $key => $value) {
-            # code...
-      
-            // $data = array(
-            //     'id'=>NULL,
-            //     'recept_id' =>$value->message_create->target->recipient_id,
-            //     'sender_id' =>$value->message_create->sender_id,
-            //     'message'=>$value->message_create->message_data->text
-            // );
-            // $this->db->insert('twitter_chat',$data);
-
-        }
-      
-
-
-
-        // var_dump($conversations['events'][0]);
-        if(!isset($conversations['events'])) $conversations['events']=array();
-        $conversations['events']= array_reverse($conversations['events']);
-        // var_dump($conversations['events']);
-        // echo "<pre>"; print_r($conversations['data']); exit;
-
-        $lalas = $conversations['events'];
-
-
-        $show_after_this_index = NULL;
-        if(!empty($last_message_id))
-        foreach($data_chat_twitter as $key=>$value)
-        {
-            if($value['sender_id']==$last_id) {
-                $show_after_this_index = $key;
-                break;
-            }
-        }
-error_reporting(0);
-        // $str = '';
-        // var_dump($conversations['events']);
-       
-        foreach($data_chat_twitter as $key=>$value)
-        {
-            if(!is_null($show_after_this_index) && $key<=$show_after_this_index) continue;
-           
-            //  $created_time = $value['tanggal']." UTC";
-            // isset($value['from']['name']) ? $value['from']['name'] = $value['from']['name'] : $value['from']['name'] = '';
-            if($value['sender_id'] == "1534821335574388736")
-            {
-                $str ='
-                <div class="chat-item chat-right" style="">
-                     <div class="chat-details mr-0 ml-0" message_id="'.$value['sender_id'].'">
-                        <div class="chat-text">'.chunk_split($value['message'], 50, '<br>').'</div>
-                        <div class="chat-time">'.$value['sender_id'].' </div>
-                     </div>
-                </div>';
-            }
-            else
-            {
-                $str ='
-                <div class="chat-item chat-left" style="">
-                     <div class="chat-details mr-0 ml-0" message_id="'.$value['sender_id'].'">
-                        <div class="chat-text">'.chunk_split($value['message'], 50, '<br>').'</div>
-                        <div class="chat-time">'.$value['sender_id'].'</div>
-                     </div>
-                </div>';
-            }
-            echo $str;
-
-        }
-    }
-   
-
-
-
-
-    public function reply_to_conversation_whatsapp()
-    {
-        $id = $this->input->post('id',true);
-        $reply_message = $this->input->post('reply_message',true);
-
-// var_dump($reply_message);
-
-        $post = [
-            'userId' => $id,
-            'message' => $reply_message,
-        ];
-        
-        $ch = curl_init('http://lewatwa.disdukcapilsurabaya.id/api/sendMessage');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-        
-        // execute!
-        $response = curl_exec($ch);
-        
-        // close the connection, release resources used
-        // curl_close($ch);
-        
-        // do anything you want with your response
-        // var_dump($response);
-
-
-        if ($response) {
-            # code...
-        echo '
-                <div class="chat-item chat-right" style="">
-                     <div class="chat-details mr-0 ml-0" message_id="'.$id.'">
-                        <div class="chat-text">'.chunk_split($reply_message, 50, '<br>').'</div>
-                        <div class="chat-time">'.date('d M Y H:i:s').'</div>
-                        </div>
-                </div>';
-                
-            
-
-        }
-
-    }
-
-
+    }  
 
     public function reply_to_conversation()
     {
@@ -2331,60 +1511,6 @@ error_reporting(0);
 
     }
   
-
-    public function reply_to_conversation_twitter()
-    {
-        $reply_message = $this->input->post('reply_message',true);
-        $last_message_id = $this->input->post('last_message_id',true);
-
-        $consumer_key = "upB4rDa30tmM2rpJRFLcTQRzi";
-$consumer_secret = "9gzdKxxjgbkN8FOsEa1apLtOs1jehcuyQthpUFNRWs4Q3k6loA";
-$access_token = "1534821335574388736-4TRtMmMKcnTJpfEv9xCCDNVOHna1M8";
-$access_token_secret = "bh6cjSizEtJmyU06y7pkK9mWLbJbIlSRKtXywW7UBE9GG";
-$bearer_token = "AAAAAAAAAAAAAAAAAAAAADYjdgEAAAAAvt7IoiMUFmUbIKc%2BMZM2VYA%2FPlk%3DabSENs97CNSdqvcMzZObzNTt4ZYBnpLYbcNyPGuZReTmRsO8WJ";
-
-$connection = new TwitterOAuth($consumer_key, $consumer_secret, $access_token, $access_token_secret);
-
-$userId = "1536991631945383936";
-$data = [
-    'event' => [
-        'type' => 'message_create',
-        'message_create' => [
-            'target' => [
-                'recipient_id' => $last_message_id
-            ],
-            'message_data' => [
-                'text' => $reply_message
-            ]
-        ]
-    ]
-];
-
-
-$result = $connection->post('direct_messages/events/new', $data, true); // Note the true
-
-if ($result) {
-    # code...
-        // $this->db->truncate('twitter_chat');
-
-        $where = array(
-            'recept_id'=>$last_message_id
-        );
-        $datas = array(
-            'status'=>'Answer'
-        );
-        $this->db->update('twitter_chat',$datas,$where);        
-
-    echo
-    '<div class="chat-item chat-right" style="">
-         <div class="chat-details mr-0 ml-0" message_id="'.$last_message_id.'">
-            <div class="chat-text">'.$reply_message.'</div>
-            <div class="chat-time">'.date('d M Y H:i:s').'</div>
-         </div>
-    </div>';
-}
-// var_dump($result);
-    }
 
     public function messenger_sync_page_messages($page_table_id=0,$social_media="fb"){
         

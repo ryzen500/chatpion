@@ -13,7 +13,7 @@
         $(document).ready(function () {
           
           var base_url="<?php echo base_url(); ?>";
-          var get_post_conversation_url = 'get_post_conversation';
+          var get_post_conversation_url = 'get_post_conversation_twitter_view';
             dataSource = new kendo.data.DataSource({
               transport: {
                 read: {
@@ -38,10 +38,10 @@
                     // pesan: { editable: false },
                     // tanggal: { editable: false },
                     // nama: { editable: false },
-                    id: { editable: false, nullable: true },
-                    name: { editable: false },
+                    sender_id: { editable: false, nullable: true },
+                    recept_id: { editable: false },
                     message: { editable: false },
-                    created_time: { editable: false },
+                    status: { editable: false },
                     // nama: { editable: false },
                     // nik: { type: "number" },
                     // phone: { type: "number" }
@@ -63,28 +63,66 @@
             reorderable: true,
             groupable: true,
             filterable: true,
-            toolbar: ["excel", "pdf", "search"],
+            toolbar: ["excel", "pdf", "search","refresh"],
             columns: [
               {
-                field: "name",
-                title: "Nama",
+                field: "sender_id",
+                title: "Pengirim ID",
+                width: 300
+              },
+              {
+                field: "recept_id",
+                title: "Pesan ditujukan kepada User",
                 width: 105
               },
-
               {
                 field: "message",
                 title: "Pesan",
                 width: 105
               },
-              {
-                field: "created_time",
-                title: "Waktu",
-                width: 105
-              },
+              // {
+              //   field: "status",
+              //   title: "Status Pesan",
+              //   width: 105
+              // },
+
+              { template: "<button id='jawab' class='k-button k-button-md k-rounded-md k-button-solid k-button-solid-base customEdit'><span class='k-button-text'>Jawab</span></button>", title:"Action",            
+              }
              
             ],
           });
         });
+
+
+        
+        $(document).on('click', '#jawab', function(e){
+          var base_url="<?php echo base_url(); ?>";
+
+  // console.log("Hello World");
+  window.location.href= base_url + "message_manager/twitter_message_dashboard";
+  return false;
+});
+
+     
+$(document).on('click', '.k-grid-refresh', function(e){
+          // var base_url="<?php echo base_url(); ?>";
+
+  // console.log("Hello World");
+
+  $.ajax({
+      type:'POST' ,
+      url: "<?php echo site_url(); ?>message_manager/reload_data",
+      // data:{id:id,page_id:page_id,subscribe_id:subscribe_id,call_from_conversation:'1'},
+      success:function(response)
+      {
+        // setInterval(() => {
+
+          window.location.href= base_url + "message_manager/twitter_message_dashboard_view";
+  return false;
+        // }, 15000);
+      }
+    }); 
+});
       </script>
 
       <style type="text/css">

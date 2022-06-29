@@ -133,6 +133,7 @@
       var from_user_id = $(this).attr('from_user_id');
       var reply_message = $("#reply_message").val().trim();
       var message_tag = $("#message_tag").val().trim();
+      var id  =  $(".card-body .chat-item:last .chat-details").attr('message_id');
       
       if(reply_message == '')
       {
@@ -144,7 +145,7 @@
       $.ajax({
           url:base_url+'message_manager/'+reply_to_conversation_url,
           type:'POST',
-          data:{page_table_id:page_table_id,reply_message:reply_message,from_user_id:from_user_id,message_tag:message_tag},
+          data:{page_table_id:page_table_id,reply_message:reply_message,from_user_id:from_user_id,message_tag:message_tag,id:id},
           success:function(response){
             $("#conversation_modal_body").append(response);
             $("#final_reply_button").removeClass('disabled');

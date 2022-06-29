@@ -71,7 +71,7 @@
                 <nav class="navbar">
                     <div class="container-fluid">
                         <div class="navbar-header">
-                            <a href="<?php echo base_url();?>" class="navbar-brand"><img class="max_height_45px" src="<?php echo base_url();?>assets/img/logo.png" alt="<?php echo $this->config->item('product_name');?>"></a>
+                            <a href="<?php echo base_url();?>" class="navbar-brand"><img class="max_height_45px" src="<?php echo base_url();?>assets/img/logo-sayangkuu.png" alt="<?php echo $this->config->item('product_name');?>"></a>
                         </div>
                         <div id="main-nav" class="stellarnav">
                             <div class="search-and-signup-button white pull-right hidden-sm hidden-xs">

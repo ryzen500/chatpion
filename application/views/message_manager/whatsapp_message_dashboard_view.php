@@ -1,17 +1,16 @@
-
 <section class="section">
   <div class="section-header mb-3 pr-0">
-    <h1><i class="fab fa-twitter"></i> <?php  echo $this->lang->line('Twitter Live Chat'); ?> </h1>
-    <?php //if(!empty($page_info)) : ?>
-    <!-- <div class="section-header-breadcrumb">
+    <h1><i class="fab fa-whatsapp"></i> <?php  echo $this->lang->line('Whats App Live Chat'); ?> </h1>
+    <?php if(!empty($page_info)) : ?>
+    <div class="section-header-breadcrumb">
         <select name="page_id" id="page_id" class="form-control select2">
           <option value=""><?php echo $this->lang->line('Select'); ?></option>
-          <?php// foreach($page_info as $page) : ?>
+          <?php foreach($page_info as $page) : ?>
             <option value="<?php echo $page['id'] ?>" <?php if($page['id']==$page_table_id) echo 'selected'; ?>><?php echo $page['page_name']; ?></option>
-          <?php //endforeach; ?>
+          <?php endforeach; ?>
         </select>
-    </div> -->
-    <?php// endif; ?>
+    </div>
+    <?php endif; ?>
   </div>
 
   <div class="section-body">
@@ -70,7 +69,7 @@
                   </div>
                   <div class="col-12 col-md-8 no_padding_col_left mt-2">
                     <div class="input-group">                  
-                       <input type="text" name="reply_message" id="reply_message" class="form-control border no_radius" placeholder="<?php echo $this->lang->line('Type a message..');?>">
+                       <input type="text" id="reply_message" class="form-control border no_radius" placeholder="<?php echo $this->lang->line('Type a message..');?>">
                        
                       <div class="input-group-append">
                         <button class="btn btn-primary" id="final_reply_button">
@@ -104,12 +103,13 @@
   </div>
 </section>
 
+
 <script>
   var social_media = 'fb';
-  var get_post_conversation_url = 'get_post_conversation_twitter';
-  var get_pages_conversation_url = 'get_pages_conversation_twitter';
-  var reply_to_conversation_url = 'reply_to_conversation_twitter';
+  var get_post_conversation_url = 'get_post_conversation_whatsapp';
+  var get_pages_conversation_url = 'get_pages_conversation_whatsapp';
+  var reply_to_conversation_url = 'reply_to_conversation_whatsapp';
 </script>
 
 
-<?php include(FCPATH.'application/views/message_manager/twitter_message_dashboard_common_js.php');?>  
+<?php include(FCPATH.'application/views/message_manager/whats_app_message_dashboard_common_js.php');?>  

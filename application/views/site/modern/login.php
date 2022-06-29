@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-12 col-sm-8 offset-sm-2 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-6 offset-xl-3">
       <div class="login-brand">
-        <a href="<?php echo base_url();?>"><img src="<?php echo base_url(); ?>assets/img/logo-sayangkuu.png" alt="<?php echo $this->config->item('product_name');?>" width="200"></a>
+        <!-- <a href="<?php echo base_url();?>"><img src="<?php echo base_url(); ?>assets/img/logo-sayangkuu.png" alt="<?php echo $this->config->item('product_name');?>" width="200"></a> -->
       </div>
 
       <div class="card card-primary">
@@ -43,7 +43,9 @@
           <form method="POST" action="<?php echo base_url('home/login'); ?>" class="needs-validation" novalidate="">
             <input type="hidden" name="csrf_token" id="csrf_token" value="<?php echo $this->session->userdata('csrf_token_session'); ?>">
             <div class="form-group">
-              <label for="email"><?php echo $this->lang->line("Email Or FB ID"); ?></label>
+              <!-- <label for="email"><?php echo $this->lang->line("Email Or FB ID"); ?></label> -->
+              <label for="email"><?php echo $this->lang->line("Email"); ?></label>
+
               <input id="email" type="text" class="form-control" value="<?php echo $default_user;?>" name="username" tabindex="1" required autofocus>
             </div>
 
@@ -51,9 +53,9 @@
               <div class="d-block">
               	<label for="password" class="control-label"><?php echo $this->lang->line("Password"); ?></label>
                 <div class="float-right">
-                  <a href="<?php echo site_url();?>home/forgot_password" class="text-small">
+                  <!-- <a href="<?php echo site_url();?>home/forgot_password" class="text-small">
                     <?php echo $this->lang->line("Forgot your password?"); ?>
-                  </a>
+                  </a> -->
                 </div>
               </div>
               <input id="password" type="password" class="form-control" value="<?php echo $default_pass;?>" name="password" tabindex="2" required>
@@ -71,9 +73,9 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 text-center margin_top_5px">
               <?php echo str_replace("ThisIsTheLoginButtonForGoogle",$this->lang->line("Sign in with Google"), $google_login_button); ?>
              </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 text-center margin_top_5px">
+            <!-- <div class="col-12 col-sm-12 col-md-12 col-lg-6 text-center margin_top_5px">
               <?php echo $fb_login_button2=str_replace("ThisIsTheLoginButtonForFacebook",$this->lang->line("Sign in with Facebook"), $fb_login_button); ?>
-            </div>
+            </div> -->
 
             <div class="col-12">
                <div class="text-muted text-center">

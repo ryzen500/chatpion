@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-6 offset-xl-3">
       <div class="login-brand">
-        <a href="<?php echo base_url();?>"><img src="<?php echo base_url(); ?>assets/img/logo.png" alt="<?php echo $this->config->item('product_name');?>" width="200"></a>
+        <a href="<?php echo base_url();?>"><img src="<?php echo base_url(); ?>assets/img/logo-sayangkuu.png" alt="<?php echo $this->config->item('product_name');?>" width="200"></a>
       </div>
 
       <div class="card card-primary">

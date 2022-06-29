@@ -14,6 +14,7 @@
   { ?>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/bootstrap/css/bootstrap.min.css">
     <?php
+    error_reporting(0);
   } ?>
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/bootstrap-social/bootstrap-social.css">
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/fontawesome/css/all.min.css">
@@ -29,7 +30,7 @@
   <script src="<?php echo base_url(); ?>assets/modules/sweetalert/sweetalert.min.js"></script>
 </head>
 
-<body class="bg-info-light-alt gradient"style="background-image:url('http://localhost/chatpion/assets/img/ilustrasi-kependudukan.jpg')">
+<body class="bg-info-light-alt gradient"style="background-image:url('<?php echo base_url(); ?>assets/img/ilustrasi.jpg');background-size:cover; background-repeat: no-repeat;">
   <div id="app">
     <section class="section">
       <?php echo $this->load->view($body); ?>
