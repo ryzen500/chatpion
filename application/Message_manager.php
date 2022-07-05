@@ -449,7 +449,7 @@ foreach ($thread->getItems() as $item) {
     }
 }
         // $this->db->where("user_id",$id);
-        $this->db->order_by("id",'ASC');
+        $this->db->order_by("id",'DESC');
         $data_chat_twitter = $this->db->get('instagram_chat')->result_array();
 
         
@@ -631,7 +631,7 @@ foreach ($thread->getItems() as $item) {
         $page_table_id = $this->input->post('page_table_id',true);
         $reply_message = $this->input->post('reply_message',true);
         $message_tag = $this->input->post('message_tag',true);
-        if($message_tag=="") $message_tag = "HUMAN_AGENT";
+        if($message_tag=="") $message_tag =  $this->session->userdata('username');
 
 
         $page_info = $this->basic->get_data('facebook_rx_fb_page_info',array('where'=>array('id'=>$page_table_id)));
@@ -1152,7 +1152,26 @@ $response = $connection->get('direct_messages/events/list', ["count" => 400]);
 
         print_r($output);
     }
-   
+
+    
+    public function get_post_conversation_whatsapp_view()
+    {
+        // create curl resource 
+        $ch = curl_init(); 
+        // set url 
+        curl_setopt($ch, CURLOPT_URL, "http://lewatwa.disdukcapilsurabaya.id/api/getUserChatLogAll"); 
+
+        //return the transfer as a string 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+        // $output contains the output string 
+        $output = curl_exec($ch); 
+
+        return $output; 
+        // print_r($output);
+        // var_dump($output);
+    }
+
+
     public function get_post_conversation_yaestar()
     {
         $this->ajax_check();

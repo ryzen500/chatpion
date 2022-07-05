@@ -1830,7 +1830,7 @@ class Home extends CI_Controller
     {
       
       if($media_type=='ig'){
-        $dropdown = array("HUMAN_AGENT"=>"Human Agent");
+        $dropdown = array("HUMAN_AGENT"=> $this->session->userdata('username'));
         return $dropdown;
       }
 
