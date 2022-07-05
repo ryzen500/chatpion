@@ -2,6 +2,12 @@
       rel="stylesheet"
       href="https://kendo.cdn.telerik.com/2022.2.510/styles/kendo.default-ocean-blue.min.css"
     />
+
+    <!-- Sweet alert -->
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- kendo -->
     <script src="https://kendo.cdn.telerik.com/2022.2.510/js/jquery.min.js"></script>
     <script src="https://kendo.cdn.telerik.com/2022.2.510/js/kendo.all.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/2.4.0/jszip.min.js"></script>
@@ -42,6 +48,7 @@
                     message: { editable: false },
                     timestamp: { editable: false },
                     status: { editable: false },
+                    user_balas : {editable:false}
 
                     // nama: { editable: false },
                     // nik: { type: "number" },
@@ -64,7 +71,7 @@
             reorderable: true,
             groupable: true,
             filterable: true,
-            toolbar: ["excel", "pdf", "search"],
+            toolbar: ["excel", "pdf", "search","refresh"],
             columns: [
               {
                 field: "user_id",
@@ -86,6 +93,12 @@
                 title: "Status Pesan",
                 width: 105
               },
+
+              {
+                field: "user_balas",
+                title: "Pegawai Yang membalas",
+                width: 105
+              },
               { template: "<button id='jawab' class='k-button k-button-md k-rounded-md k-button-solid k-button-solid-base customEdit'><span class='k-button-text'>Jawab</span></button>", title:"Action",            
               }
              
@@ -100,6 +113,57 @@
   // console.log("Hello World");
   window.location.href= base_url + "message_manager/instagram_message_dashboard";
   return false;
+});
+
+
+
+     
+$(document).on('click', '.k-grid-refresh', function(e){
+          // var base_url="<?php echo base_url(); ?>";
+
+  // console.log("Hello World");
+
+  $.ajax({
+      type:'POST' ,
+      url: "<?php echo site_url(); ?>message_manager/reload_data_instagram",
+      // data:{id:id,page_id:page_id,subscribe_id:subscribe_id,call_from_conversation:'1'},
+      success:function(response)
+      {
+
+        let timerInterval
+Swal.fire({
+  title: 'Update Data Messages!',
+  html: 'Mengambil Data Terbaru.',
+  timer: 2000,
+  timerProgressBar: true,
+  didOpen: () => {
+    Swal.showLoading()
+    // const b = Swal.getHtmlContainer().querySelector('b')
+    // timerInterval = setInterval(() => {
+    //   b.textContent = Swal.getTimerLeft()
+    // }, 100)
+  },
+  willClose: () => {
+    clearInterval(timerInterval)
+  }
+}).then((result) => {
+  /* Read more about handling dismissals below */
+  if (result.dismiss === Swal.DismissReason.timer) {
+    // console.log('I was closed by the timer')
+    window.location.href= base_url + "message_manager/instagram_message_dashboard_view";
+return true;
+// location.reload();
+}
+})
+
+
+        // setInterval(() => {
+
+  //         window.location.href= base_url + "message_manager/instagram_message_dashboard_view";
+  // return false;
+        // }, 15000);
+      }
+    }); 
 });
 
       </script>

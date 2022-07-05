@@ -85,6 +85,9 @@
       var thread_id = $(this).attr('thread_id');
       var page_table_id = $(this).attr('page_table_id');
       var id = $(this).attr('data-id');
+      var sessionData = "<?php echo $this->session->userdata('username'); ?>";
+
+
 
       var last_message_id  =  $(".card-body .chat-item:last .chat-details").attr('message_id');
       if(!already_loaded) last_message_id = '';
@@ -100,7 +103,7 @@
           context:this,
           url:base_url+'message_manager/'+get_post_conversation_url,
           type:'POST',
-          data:{thread_id:thread_id,page_table_id:page_table_id,from_user_id:from_user_id,last_message_id:last_message_id,id:id}, 
+          data:{thread_id:sessionData,page_table_id:page_table_id,from_user_id:from_user_id,last_message_id:last_message_id,id:id}, 
           success:function(response){
             console.log(response);
             $("#chat_with").html(from_user);
@@ -133,6 +136,8 @@
       var from_user_id = $(this).attr('from_user_id');
       var reply_message = $("#reply_message").val().trim();
       var message_tag = $("#message_tag").val().trim();
+      var sessionData = "<?php echo $this->session->userdata('username'); ?>";
+
       var id  =  $(".card-body .chat-item:last .chat-details").attr('message_id');
       
       if(reply_message == '')
@@ -145,7 +150,7 @@
       $.ajax({
           url:base_url+'message_manager/'+reply_to_conversation_url,
           type:'POST',
-          data:{page_table_id:page_table_id,reply_message:reply_message,from_user_id:from_user_id,message_tag:message_tag,id:id},
+          data:{page_table_id:page_table_id,reply_message:reply_message,from_user_id:from_user_id,message_tag:sessionData,id:id},
           success:function(response){
             $("#conversation_modal_body").append(response);
             $("#final_reply_button").removeClass('disabled');

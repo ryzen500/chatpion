@@ -14,7 +14,7 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 
 <head>
 	<meta charset="utf-8">
-
+	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
 	<!--====== Title ======-->
 	<title><?php echo $this->config->item('product_name'); if($this->config->item('slogan')!='') echo " | ".$this->config->item('slogan')?></title>
 
@@ -94,7 +94,7 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 					<div class="col-lg-12">
 						<nav class="navbar navbar-expand-lg">
 							<a class="navbar-brand" href="">
-								<img id="logo" src="<?php echo base_url();?>assets/img/logo-sayangkuu.png" alt="Logo">
+								<img id="logo" src="<?php echo base_url();?>assets/img/takon-duk-capil.png" alt="Logo">
 							</a>
 							<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
 								aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -767,7 +767,7 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 			<div class="row">
 				<div class="col-12 col-md-4">
 					<div class="footer-widget wow fadeInUp text-center" data-wow-delay=".2s">
-						<a href="" class="mb-4 d-block"><img class="logo" src="<?php echo base_url();?>assets/img/logo.png" alt=""> </a>
+						<a href="" class="mb-4 d-block"><img class="logo" src="<?php echo base_url();?>assets/img/takon-duk-capil.png" alt=""> </a>
 						<p class="wow fadeInUp" data-wow-delay=".4s"><?php echo $this->lang->line("Revolutionary, world's very first, and complete marketing software for Instagram developed using official APIs."); ?></p>
 						
 					</div>

@@ -2,6 +2,10 @@
       rel="stylesheet"
       href="https://kendo.cdn.telerik.com/2022.2.510/styles/kendo.default-ocean-blue.min.css"
     />
+	
+<!-- Sweet alert -->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Kendo -->
     <script src="https://kendo.cdn.telerik.com/2022.2.510/js/jquery.min.js"></script>
     <script src="https://kendo.cdn.telerik.com/2022.2.510/js/kendo.all.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/2.4.0/jszip.min.js"></script>
@@ -9,6 +13,31 @@
   
 <div id="example">
       <div id="grid"></div>
+	
+<div class="modal fade" id="modaljavascript" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" width="100%">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        	<!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Modal Javascript</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+            	Mengambil Data terbaru<br>
+              <div class="spinner-grow" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
+
+       		</div>
+       		<!-- Modal footer -->
+		<div class="modal-footer">
+		   <button type="button" class="btn btn-danger" id="closemodal">Close</button>
+		</div>
+        </div>
+    </div>
+</div>
+
       <script>
         $(document).ready(function () {
           
@@ -41,7 +70,7 @@
                     sender_id: { editable: false, nullable: true },
                     recept_id: { editable: false },
                     message: { editable: false },
-                    status: { editable: false },
+                    user_balas: { editable: false },
                     // nama: { editable: false },
                     // nik: { type: "number" },
                     // phone: { type: "number" }
@@ -80,11 +109,11 @@
                 title: "Pesan",
                 width: 105
               },
-              // {
-              //   field: "status",
-              //   title: "Status Pesan",
-              //   width: 105
-              // },
+              {
+                field: "user_balas",
+                title: "Pegawai Yang membalas Pesan",
+                width: 105
+              },
 
               { template: "<button id='jawab' class='k-button k-button-md k-rounded-md k-button-solid k-button-solid-base customEdit'><span class='k-button-text'>Jawab</span></button>", title:"Action",            
               }
@@ -115,11 +144,37 @@ $(document).on('click', '.k-grid-refresh', function(e){
       // data:{id:id,page_id:page_id,subscribe_id:subscribe_id,call_from_conversation:'1'},
       success:function(response)
       {
-        // setInterval(() => {
+        let timerInterval
+Swal.fire({
+  title: 'Update Data Messages!',
+  html: 'Mengambil Data Terbaru.',
+  timer: 60000,
+  timerProgressBar: true,
+  didOpen: () => {
+    Swal.showLoading()
+    const b = Swal.getHtmlContainer().querySelector('b')
+    // timerInterval = setInterval(() => {
+    //   b.textContent = Swal.getTimerLeft()
+    // }, 100)
+  },
+  willClose: () => {
+    clearInterval(timerInterval)
+  }
+}).then((result) => {
+  /* Read more about handling dismissals below */
+  if (result.dismiss === Swal.DismissReason.timer) {
+    // console.log('I was closed by the timer')
+    window.location.href= base_url + "message_manager/twitter_message_dashboard_view";
+return true;
+// location.reload();
+}
+})
 
-          window.location.href= base_url + "message_manager/twitter_message_dashboard_view";
-  return false;
-        // }, 15000);
+  //      setInterval(() => {
+
+          // window.location.href= base_url + "message_manager/twitter_message_dashboard_view";
+  // return false;
+  //       }, 15000);
       }
     }); 
 });

@@ -13,11 +13,13 @@
       </div>
       <script>
         $(document).ready(function () {
-          var crudServiceBaseUrl = "http://lewatwa.disdukcapilsurabaya.id",
+          
+          var base_url="<?php echo base_url(); ?>";
+          var get_post_conversation_url = 'get_post_conversation_whatsapp_view';
             dataSource = new kendo.data.DataSource({
               transport: {
                 read: {
-                  url: crudServiceBaseUrl + "/api/getUserChatLogAll",
+                  url:base_url+'message_manager/'+get_post_conversation_url,
                   dataType: "json"
                 },
                 parameterMap: function (options, operation) {
@@ -38,12 +40,15 @@
                     tanggal: { editable: false },
                     nama: { editable: false },
                     nik: { type: "number" },
-                    phone: { type: "number" }
+                    phone: { type: "number" },
+                    code: { editable: false },
+
                   }
                 }
               }
             });
 
+            console.log(dataSource)
           $("#grid").kendoGrid({
             dataSource: dataSource,
             columnMenu: {
@@ -82,6 +87,12 @@
               {
                 field: "tanggal",
                 title: "Tanggal",
+                width: 105
+              },
+
+              {
+                field: "code",
+                title: "code",
                 width: 105
               },
               { template: "<button id='jawab' class='k-button k-button-md k-rounded-md k-button-solid k-button-solid-base customEdit'><span class='k-button-text'>Jawab</span></button>", title:"Action",            
@@ -173,14 +184,3 @@
         }
       </style>
 </section>
-
-
-<script>
-  var social_media = 'fb';
-  var get_post_conversation_url = 'get_post_conversation_whatsapp';
-  var get_pages_conversation_url = 'get_pages_conversation_whatsapp';
-  var reply_to_conversation_url = 'reply_to_conversation';
-</script>
-
-
-<?php include(FCPATH.'application/views/message_manager/whats_app_message_dashboard_common_js.php');?>  

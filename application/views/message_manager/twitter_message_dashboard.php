@@ -66,8 +66,11 @@
                     </div>
                   </div>
                   <div class="col-10 col-md-3 no_padding_col_right mt-2">
-                    <?php echo form_dropdown('message_tag', $tag_list, 'HUMAN_AGENT','class="form-control select2" id="message_tag" style="width: 100% !important;height:50px !important;"'); ?>
-                  </div>
+                  <?php echo form_dropdown('message_tag', $tag_list, $this->session->userdata('username'),'class="form-control select2" id="message_tag" style="width: 100% !important;height:50px !important;"'); ?>
+                  <!-- <?php// echo form_dropdown('message_tag', $tag_list, 'HUMAN_AGENT','class="form-control select2" id="message_tag" style="width: 100% !important;height:50px !important;"'); ?> -->
+                                    <!-- <input type="text" class="form-control select2" id="message_tag"  name="message_tag" value="<?php echo $this->session->userdata('username');?>" style="width: 100% !important;height:50px !important;" readonly> -->
+  
+                </div>
                   <div class="col-12 col-md-8 no_padding_col_left mt-2">
                     <div class="input-group">                  
                        <input type="text" name="reply_message" id="reply_message" class="form-control border no_radius" placeholder="<?php echo $this->lang->line('Type a message..');?>">

@@ -353,7 +353,7 @@ $month_name_array = array(
       <div class="col-12">
         <div class="card  mb-2">
           <div class="card-header">
-            <h4><i class="fas fa-users"></i> <?php echo $this->lang->line("Messenger Subscriber Gain - 12 Months") ?> </h4>
+            <h4><i class="fas fa-users"></i> <?php echo $this->lang->line("Social Media Grafik") ?> </h4>
           </div>
           <div class="card-body">
             <div class="row">
@@ -439,7 +439,7 @@ $month_name_array = array(
     <?php endif; ?>
     </div>
 
-
+<!-- 
     <div class="row">
       <div class="col-12 col-md-12">
         <div class="card mb-2">
@@ -514,7 +514,7 @@ $month_name_array = array(
           </div>
         </div>
       </div>   
-    </div>
+    </div> -->
 
     <!--<div class="row no-gutters mb-4">     
       <div class="col-12 col-md-4 ltr">
@@ -565,7 +565,7 @@ $month_name_array = array(
     </div>-->
 
     <!-- Ecommerce earning statistics -->
-    <div class="row mt-3 <?php if(empty(array_values($fb_earning_chart_values))) echo 'd-none';?>">
+    <!-- <div class="row mt-3 <?php if(empty(array_values($fb_earning_chart_values))) echo 'd-none';?>">
       <div class="col-12">
         <div class="card mb-0">
           <div class="card-header border-bottom-0">
@@ -656,9 +656,9 @@ $month_name_array = array(
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <div class="row campaign_statistics mt-4">
+    <!-- <div class="row campaign_statistics mt-4">
       <div class="col-12">
         <div class="card mb-0">
           <div class="card-body p-md-0">
@@ -791,9 +791,9 @@ $month_name_array = array(
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
-
+<!-- 
     <div class="row dashboard_fullCalendar no-gutters mt-4">
       <div class="col-12">
         <div class="card no_radius">
@@ -808,7 +808,7 @@ $month_name_array = array(
             </div>
         </div>
       </div>
-    </div>
+    </div> -->
     
   <?php if($other_dashboard == 1) : ?>
   </div>
@@ -1010,14 +1010,14 @@ console.log(whats_app_chat);
     data:twitter
   
   },
-   {
-       label: v3,
-       type:'bar',
-       backgroundColor: gradient_secondary,
-       borderColor: 'transparent',
-       data: <?php echo json_encode(array_values($phone_subscribers)) ?>,
-    // data:whats_app_chat
-    }
+  //  {
+  //      label: v3,
+  //      type:'bar',
+  //      backgroundColor: gradient_secondary,
+  //      borderColor: 'transparent',
+  //     //  data: <?php //echo json_encode(array_values($phone_subscribers)) ?>,
+  //   data:whats_app_chat
+  //   }
    ]
   };
 
