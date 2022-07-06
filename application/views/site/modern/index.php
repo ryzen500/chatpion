@@ -153,7 +153,7 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 							    $promo_video = $this->config->item('promo_video');
 							    $video_source = videoType($promo_video);
 							 ?>
-							<a href="#" class="ms-2 watch-btn glightbox wow fadeInUp <?php if($this->config->item('display_video_block') == '0' || $this->config->item('promo_video') == '') echo 'd-none';?>" data-wow-delay=".5s"> <i class="lni lni-play"></i> <span><?php echo $this->lang->line("Quick Video"); ?></span></a>
+							<!-- <a href="#" class="ms-2 watch-btn glightbox wow fadeInUp <?php if($this->config->item('display_video_block') == '0' || $this->config->item('promo_video') == '') echo 'd-none';?>" data-wow-delay=".5s"> <i class="lni lni-play"></i> <span><?php echo $this->lang->line("Quick Video"); ?></span></a> -->
 						</div>
 					</div>
 				</div>
@@ -183,30 +183,30 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 							<i class="lni lni-facebook-messenger"></i>
 						</div>
 						<div class="feature-content">
-							<h4><?php echo $this->lang->line("Messenger Chatbot"); ?></h4>
-							<p><?php echo $this->lang->line("Setup Messenger bot for replying 24/7 with Visual Flow Builder."); ?></p>
+							<h4><?php echo $this->lang->line("Facebook Live Chat"); ?></h4>
+							<p><?php echo $this->lang->line("Live Chat menggunakan Facebook"); ?></p>
 						</div>
 					</div>
 				</div>
 				<div class="col-xl-3 col-lg-3 col-md-6">
 					<div class="single-feature item-2 wow fadeInUp" data-wow-delay=".4s">
 						<div class="feature-icon icon-style gradient-2">
-							<i class="lni lni-wechat"></i>
+							<i class="lni lni-instagram"></i>
 						</div>
 						<div class="feature-content">
-							<h4><?php echo $this->lang->line("Live Chat"); ?></h4>
-							<p><?php echo $this->lang->line("Live Chat with Facebook/Instagram subscribers"); ?></p>
+							<h4><?php echo $this->lang->line("Instagram Live Chat"); ?></h4>
+							<p><?php echo $this->lang->line("Live Chat Menggunakan Instagram "); ?></p>
 						</div>
 					</div>
 				</div>
 				<div class="col-xl-3 col-lg-3 col-md-6">
 					<div class="single-feature item-3 wow fadeInUp" data-wow-delay=".6s">
-						<div class="feature-icon icon-style gradient-3">
-							<i class="lni lni-reply"></i>
+						<div class="feature-icon icon-style gradient-1">
+							<i class="lni lni-twitter"></i>
 						</div>
 						<div class="feature-content">
-							<h4><?php echo $this->lang->line("Comment Reply"); ?></h4>
-							<p><?php echo $this->lang->line("Template, hide/delete offensive comment, keyword based reply, generic reply to facebook pages posts comment."); ?></p>
+							<h4><?php echo $this->lang->line("Twitter Live Chat"); ?></h4>
+							<p><?php echo $this->lang->line("Live Chat Menggunakan Twitter "); ?></p>
 						</div>
 					</div>
 				</div>
@@ -216,8 +216,8 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 							<i class="lni lni-tag"></i>
 						</div>
 						<div class="feature-content">
-							<h4><?php echo $this->lang->line("Social Poster"); ?></h4>
-							<p><?php echo $this->lang->line("Instant/Schedule posting on Social Medias."); ?></p>
+							<h4><?php echo $this->lang->line("Yaestar"); ?></h4>
+							<p><?php echo $this->lang->line("Record Call"); ?></p>
 						</div>
 					</div>
 				</div>
