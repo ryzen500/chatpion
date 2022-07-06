@@ -24,38 +24,38 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<!--====== Favicon Icon ======-->
-	<link rel="shortcut icon" href="./assets/img/favicon.png">
+	<link rel="shortcut icon" href="<?php echo base_url();?>assets/img/favicon.png">
 
 	<!--====== Animate CSS ======-->
-	<link rel="stylesheet" href="./assets/modern/css/animate.css">
+	<link rel="stylesheet" href="<?php echo base_url('assets/modern/css/animate.css');?>">
 
 	<!--====== Tiny slider CSS ======-->
-	<link rel="stylesheet" href="./assets/modern/css/tiny-slider.css">
+	<link rel="stylesheet" href="<?php echo base_url('assets/modern/css/tiny-slider.css');?>">
 
 	<!--====== Swiper slider css ======-->
-	<link rel="stylesheet" href="./assets/modern/css/swiper.min.css">
+	<link rel="stylesheet" href="<?php echo base_url('assets/modern/css/swiper.min.css');?>">
 
 	<!--====== Glightbox CSS ======-->
-	<link rel="stylesheet" href="./assets/modern/css/glightbox.min.css">
+	<link rel="stylesheet" href="<?php echo base_url('assets/modern/css/glightbox.min.css');?>">
 
 	<!--====== Line Icons CSS ======-->
-	<link rel="stylesheet" href="./assets/modern/css/LineIcons.2.0.css">
+	<link rel="stylesheet" href="<?php echo base_url('assets/modern/css/LineIcons.2.0.css');?>">
 
 	<!--====== Bootstrap CSS ======-->
 
 	<?php if($is_rtl) 
 	{ ?>
-		<link rel="stylesheet" href="./assets/modern/css/rtl/bootstrap.rtl.min.css">
+		<link rel="stylesheet" href="<?php echo base_url('assets/modern/css/rtl/bootstrap.rtl.min.css');?>">
 		<?php 
 	} 
 	else 
 	{ ?>
-		<link rel="stylesheet" href="./assets/modern/css/bootstrap-5.0.5-alpha.min.css">
+		<link rel="stylesheet" href="<?php echo base_url('assets/modern/css/bootstrap-5.0.5-alpha.min.css');?>">
 		<?php
 	} ?>
 
 	<!--====== Style CSS ======-->
-	<link rel="stylesheet" href="./assets/modern/css/style.css">
+	<link rel="stylesheet" href="<?php echo base_url('assets/modern/css/style.css');?>">
 
 </head>
 
@@ -94,7 +94,7 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 					<div class="col-lg-12">
 						<nav class="navbar navbar-expand-lg">
 							<a class="navbar-brand" href="">
-								<img id="logo" src="./assets/img/takon-duk-capil.png" alt="Logo">
+								<img id="logo" src="<?php echo base_url();?>assets/img/takon-duk-capil.png" alt="Logo">
 							</a>
 							<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
 								aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -125,7 +125,7 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 										<a class="page-scroll" href="#contact"><?php echo $this->lang->line('Contact'); ?></a>
 									</li>
 									<li class="nav-item">
-									    <a class="" href="./home/login"><?php echo $this->lang->line('Login'); ?></a>
+									    <a class="" href="<?php echo site_url('home/login'); ?>"><?php echo $this->lang->line('Login'); ?></a>
 									</li>
 								</ul>
 							</div> <!-- navbar collapse -->
@@ -159,10 +159,10 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 				</div>
 				<div class="col-xl-6 col-lg-6">
 					<div class="hero-img">
-						<img src="./assets/modern/images/features-image-2.png" alt="" class="wow fadeInRight" data-wow-delay=".2s">
-						<img src="./assets/modern/images/features-image-1.png" alt="" class="img-screen screen-1 wow fadeInUp" data-wow-delay=".25s">
-						<img src="./assets/modern/images/features-image-2.png" alt="" class="img-screen screen-2 wow fadeInUp" data-wow-delay=".3s">
-						<img src="./assets/modern/images/features-image-2.png" alt="" class="img-screen screen-3 wow fadeInUp" data-wow-delay=".35s">
+						<img src="<?php echo base_url();?>assets/modern/images/features-image-2.png" alt="" class="wow fadeInRight" data-wow-delay=".2s">
+						<img src="<?php echo base_url();?>assets/modern/images/features-image-1.png" alt="" class="img-screen screen-1 wow fadeInUp" data-wow-delay=".25s">
+						<img src="<?php echo base_url();?>assets/modern/images/features-image-2.png" alt="" class="img-screen screen-2 wow fadeInUp" data-wow-delay=".3s">
+						<img src="<?php echo base_url();?>assets/modern/images/features-image-2.png" alt="" class="img-screen screen-3 wow fadeInUp" data-wow-delay=".35s">
 					</div>
 				</div>
 			</div>
@@ -232,8 +232,8 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 			<div class="row">
 				<div class="col-xl-5 col-lg-6">
 					<div class="how-work-img text-center text-lg-left">
-						<img src="./assets/modern/images/download-img.png" alt="" class="w-100 wow fadeInLeft img-fluid" data-wow-delay=".2s">
-						<img src="./assets/modern/images/dots-shape.svg" alt="" class="shape dots-shape wow fadeInUp" data-wow-delay=".3s">
+						<img src="<?php echo base_url();?>assets/modern/images/download-img.png" alt="" class="w-100 wow fadeInLeft img-fluid" data-wow-delay=".2s">
+						<img src="<?php echo base_url();?>assets/modern/images/dots-shape.svg" alt="" class="shape dots-shape wow fadeInUp" data-wow-delay=".3s">
 					</div>
 				</div>
 				<div class="col-xl-6 offset-xl-1 col-lg-6">
@@ -777,9 +777,9 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 						<h4><?php echo $this->lang->line("Quick Links"); ?></h4>
 						<ul>
 							<!-- <li><a href="#pricing" class="page-scroll"><?php echo $this->lang->line("Pricing"); ?></a></li> -->
-							<li><a href="./home/privacy_policy" target="_blank"><?php echo $this->lang->line("Privacy Policy"); ?></a></li>
-							<li><a href="./home/terms_use" target="_blank"><?php echo $this->lang->line("Terms of Service"); ?></a></li>
-							<li><a href="./home/gdpr" target="_blank"><?php echo $this->lang->line("GDPR Compliant"); ?></a></li>	
+							<li><a href="<?php echo base_url('home/privacy_policy'); ?>" target="_blank"><?php echo $this->lang->line("Privacy Policy"); ?></a></li>
+							<li><a href="<?php echo base_url('home/terms_use'); ?>" target="_blank"><?php echo $this->lang->line("Terms of Service"); ?></a></li>
+							<li><a href="<?php echo base_url('home/gdpr'); ?>" target="_blank"><?php echo $this->lang->line("GDPR Compliant"); ?></a></li>	
 						</ul>
 					</div>
 				</div>
@@ -809,7 +809,7 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 		
 	    <div class="text-center cookiealert">
 	        <div class="cookiealert-container py-3">
-	            <a class="cookie_content_css" href="./home/privacy_policy#cookie_policy">
+	            <a class="cookie_content_css" href="<?php echo base_url('home/privacy_policy#cookie_policy');?>">
 	                <?php echo $this->lang->line("This site requires cookies in order for us to provide proper service to you.");?>
 	            </a>
 	            <a type="button" href="#" class="btn btn-warning btn-sm acceptcookies black_color" aria-label="Close">
@@ -833,33 +833,33 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 	</script>
 
 	<!--====== jQuery js ======-->
-	<script src="./assets/modern/js/jquery-1.12.4.min.js"></script>
+	<script src="<?php echo base_url('assets/modern/js/jquery-1.12.4.min.js');?>"></script>
 
 	<!--====== Bootstrap js ======-->
-	<script src="./assets/modern/js/bootstrap.bundle-5.0.0.alpha-min.js"></script>
+	<script src="<?php echo base_url('assets/modern/js/bootstrap.bundle-5.0.0.alpha-min.js');?>"></script>
 
 	<!--====== Tiny slider js ======-->
-	<script src="./assets/modern/js/tiny-slider.js"></script>
+	<script src="<?php echo base_url('assets/modern/js/tiny-slider.js');?>"></script>
 
 	<!--====== Swiper slider js ======-->
-	<script src="./assets/modern/js/swiper.min.js"></script>
+	<script src="<?php echo base_url('assets/modern/js/swiper.min.js');?>"></script>
 
 	<!--====== glightbox js ======-->
-	<script src="./assets/modern/js/glightbox.min.js"></script>
+	<script src="<?php echo base_url('assets/modern/js/glightbox.min.js');?>"></script>
 
 	<!--====== wow js ======-->
-	<script src="./assets/modern/js/wow.min.js"></script>
+	<script src="<?php echo base_url('assets/modern/js/wow.min.js');?>"></script>
 
 	<!--====== count-up js ======-->
-	<script src="./assets/modern/js/count-up.min.js"></script>
+	<script src="<?php echo base_url('assets/modern/js/count-up.min.js');?>"></script>
 
 	<!--====== contact form js ======-->
-	<script src="./assets/modern/js/contact-form.js"></script>
+	<script src="<?php echo base_url('assets/modern/js/contact-form.js');?>"></script>
 
 	<!--====== Main js ======-->
-	<script src="./assets/modern/js/main.js"></script>
+	<script src="<?php echo base_url('assets/modern/js/main.js');?>"></script>
 
-	<script src="./assets/js/system/site_default.js"></script>
+	<script src="<?php echo base_url('assets/js/system/site_default.js');?>"></script>
 
 	<?php $this->load->view("include/fb_px"); ?> 
     <?php $this->load->view("include/google_code"); ?> 
