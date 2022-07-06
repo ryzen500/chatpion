@@ -145,8 +145,8 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 				<div class="col-xl-6 col-lg-6">
 					<div class="hero-content">
 						<h2 class="wow fadeInUp" data-wow-delay=".2s"><?php echo $this->config->item('product_name'); ?></h2>
-						<h3 class="wow fadeInUp" data-wow-delay=".2s"> <?php echo $this->lang->line("Developed using Facebook official API"); ?></h3><br>
-						<p class="wow fadeInUp" data-wow-delay=".4s"><?php echo $this->lang->line("Revolutionary, world's very first, and complete marketing software for Facebook & Other Social Medias developed using official APIs."); ?></p>
+						<h3 class="wow fadeInUp" data-wow-delay=".2s"> <?php echo $this->lang->line(""); ?></h3><br>
+						<p class="wow fadeInUp" data-wow-delay=".4s"><?php echo $this->lang->line("Berikan pengalaman yang dipersonalisasi dan tingkatkan kepuasan warga negara Anda dengan platform layanan pelanggan yang cerdas"); ?></p>
 						<div class="hero-btns">
 							<a href="<?php echo site_url('home/sign_up'); ?>" class="main-btn btn-hover wow fadeInUp <?php if($this->config->item('enable_signup_form') =='0') echo "d-none"; ?>" data-wow-delay=".45s"><?php echo $this->lang->line("Sign up now"); ?></a>
 							<?php 
@@ -251,13 +251,13 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 											<span class="d-inline-flex mb-0 icon-style gradient-4">
 												<i class="lni lni-facebook-original"></i>
 											</span>
-											<span><?php echo $this->lang->line("Connect Social account"); ?></span>
+											<span><?php echo $this->lang->line("Hubungkan Social account"); ?></span>
 										</button>
 									</div>
 
 									<div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
 										<div class="accordion-content">
-											<?php echo $this->lang->line("Connect Facebook account is just few clicks easy. Clicking 'Login with Facebook' button will prompt you to allow access to import your facebook & instagram account and enable bot for page and you are ready to go."); ?>
+											<?php echo $this->lang->line("Hubungkan akun Facebook hanya dengan beberapa klik mudah. Mengklik tombol 'Masuk dengan Facebook' akan meminta Anda untuk mengizinkan akses untuk mengimpor facebook Anda & Anda siap untuk pergi."); ?>
 										</div>
 									</div>
 								</div>
@@ -268,13 +268,13 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 											<span class="d-inline-flex mb-0 icon-style gradient-1">
 												<i class="lni lni-comments-alt"></i>
 											</span>
-											<span><?php echo $this->lang->line("Create Comment"); ?></span>
+											<span><?php echo $this->lang->line("Membuat Pesan"); ?></span>
 										</button>
 									</div>
 
 									<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
 										<div class="accordion-content">
-											<?php echo $this->lang->line("You can comment your own post one time or multiple times. You can save your comments as template and use it whenever you want. Perodic posting feature will allow you to comment randomly or serially taking content from template in a frequent manner and start-end time interval."); ?>
+											<?php echo $this->lang->line("Anda dapat mengirim pesan Anda sendiri satu kali atau beberapa kali. Anda dapat menyimpan pesan Anda dan orang lain."); ?>
 										</div>
 									</div>
 								</div>
@@ -285,18 +285,18 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 											<span class="d-inline-flex mb-0 icon-style gradient-3">
 												<i class="lni lni-reply"></i>
 											</span>
-											<span><?php echo $this->lang->line("Create Comment Reply"); ?></span>
+											<span><?php echo $this->lang->line("Menampilkan Data Pesan"); ?></span>
 										</button>
 									</div>
 
 									<div id="collapseThree" class="collapse" aria-labelledby="headingThree"
 										data-parent="#accordionExample">
 										<div class="accordion-content">
-											<?php echo $this->lang->line("Reply automatically your facebook post based on comment content. You can also hide/delete any offensive comments. You can save your replies as template and use it whenever you want."); ?>
+											<?php echo $this->lang->line("Pesan Anda akan tersimpan dalam database kami"); ?>
 										</div>
 									</div>
 								</div>
-
+<!-- 
 								<div class="single-accordion mb-30 wow fadeInUp" data-wow-delay=".5s">
 									<div class="accordion-btn">
 										<button class="btn-block text-left collapsed" type="button" data-toggle="collapse"
@@ -331,7 +331,7 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 											<?php echo $this->lang->line("Just create text/image/video/link content you want to post. Now post it or schedule it to post later. You can also set scheduled periodic post to post same content periodically."); ?>
 										</div>
 									</div>
-								</div>
+								</div> -->
 								
 							</div>
 						</div>
@@ -348,16 +348,16 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 	<!--====== VIDEO PART START ======-->
 	<section id="tutorial" class="video-area pt-130 <?php if($this->config->item('display_video_block') == '0' || $this->config->item('promo_video') == '') echo 'd-none';?>">
 		<div class="container">
-			<div class="video-header bg_cover">
+			<!-- <div class="video-header bg_cover">
 				<div class="section-title text-center">
 					<h3 class="mb-60 wow fadeInUp" data-wow-delay=".2s"><?php echo $this->lang->line("Watch a Quick Video"); ?></h3>
 				</div>
-			</div>
-			<div class="video-frame wow fadeInUp" data-wow-delay=".4s">
-				<img src="<?php echo base_url();?>assets/modern/images/video-frame.png" alt="">
+			</div> -->
+			<!-- <div class="video-frame wow fadeInUp" data-wow-delay=".4s"> -->
+				<!-- <img src="<?php echo base_url();?>assets/modern/images/video-frame.png" alt=""> -->
 				<a href="#" class="btn-hover video-btn glightbox"><i class="lni lni-play"></i></a>
-			</div>
-
+			<!-- </div> -->
+<!-- 
 			    <div class="row">
 			    	<?php 
 			        $custom_videos = $this->config->item('custom_video'); 
@@ -392,7 +392,7 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 			        	</div>
 			        </div>
 					<?php endforeach; ?>
-			    </div>
+			    </div> -->
 		</div>
 	</section>
 	<!--====== VIDEO PART ENDS ======-->
@@ -602,7 +602,7 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 	<!--====== DOWNLOAD PART START ======-->
 	<section class="download-area pt-100 pb-150" <?php if(empty($pricing_table_data)) echo "id='pricing'"; ?>>
 		<div class="container">
-			<div class="download-wrapper bg_cover">
+			<!-- <div class="download-wrapper bg_cover">
 				<div class="row">
 					<div class="col-xl-6 col-lg-6 offset-1 col-11">
 						<div class="download-content">
@@ -634,7 +634,7 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 		</div>
 	</section>
 	<!--====== DOWNLOAD PART ENDS ======-->
@@ -768,7 +768,7 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 				<div class="col-12 col-md-4">
 					<div class="footer-widget wow fadeInUp text-center" data-wow-delay=".2s">
 						<a href="" class="mb-4 d-block"><img class="logo" src="<?php echo base_url();?>assets/img/takon-duk-capil.png" alt=""> </a>
-						<p class="wow fadeInUp" data-wow-delay=".4s"><?php echo $this->lang->line("Revolutionary, world's very first, and complete marketing software for Instagram developed using official APIs."); ?></p>
+						<p class="wow fadeInUp" data-wow-delay=".4s"><?php echo $this->lang->line("Berikan pengalaman yang dipersonalisasi dan tingkatkan kepuasan warga negara Anda dengan platform layanan pelanggan yang cerdas"); ?></p>
 						
 					</div>
 				</div>
@@ -776,7 +776,7 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 					<div class="footer-widget wow fadeInUp text-center" data-wow-delay=".6s">
 						<h4><?php echo $this->lang->line("Quick Links"); ?></h4>
 						<ul>
-							<li><a href="#pricing" class="page-scroll"><?php echo $this->lang->line("Pricing"); ?></a></li>
+							<!-- <li><a href="#pricing" class="page-scroll"><?php echo $this->lang->line("Pricing"); ?></a></li> -->
 							<li><a href="<?php echo base_url('home/privacy_policy'); ?>" target="_blank"><?php echo $this->lang->line("Privacy Policy"); ?></a></li>
 							<li><a href="<?php echo base_url('home/terms_use'); ?>" target="_blank"><?php echo $this->lang->line("Terms of Service"); ?></a></li>
 							<li><a href="<?php echo base_url('home/gdpr'); ?>" target="_blank"><?php echo $this->lang->line("GDPR Compliant"); ?></a></li>	
