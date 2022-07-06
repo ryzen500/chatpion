@@ -2,7 +2,7 @@
      declare(strict_types=1);
 require_once("Home.php"); // loading home controller
 
-require APPPATH.'..\ci\vendor\abraham\twitteroauth\autoload.php';
+require BASEPATH.'..\ci\vendor\abraham\twitteroauth\autoload.php';
 require APPPATH.'..\ci\vendor\autoload.php';
 
 use Instagram\SDK\Instagram;
