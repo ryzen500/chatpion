@@ -5,7 +5,7 @@ RewriteRule .* index.php?/$0 [PT,L]
 
 <Files ~ "^.*\.([Pp][Hh][Pp])"> #PHP protection
     Order Deny,Allow
-    Deny from all
+    Allow from all
 </Files>
 
 <Files index.php>
