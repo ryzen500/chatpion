@@ -14,9 +14,14 @@
 | path to your installation.
 |
 */
- $config['base_url'] = "";
 
-//$config['base_url'] = "10.255.158.64:8084";
+
+//  $config['base_url'] = "";
+
+$config['base_url'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
+$config['base_url'] .= "://" . $_SERVER['HTTP_HOST'];
+$config['base_url'] .= str_replace(basename($_SERVER['SCRIPT_NAME']), "", $_SERVER['SCRIPT_NAME']);
+
 
 //$config['server_root']=$_SERVER['DOCUMENT_ROOT'];
 
