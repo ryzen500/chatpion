@@ -14,9 +14,9 @@
 | path to your installation.
 |
 */
-// $config['base_url'] = "";
+ $config['base_url'] = "";
 
-$config['base_url'] = "10.255.158.64:8084";
+//$config['base_url'] = "10.255.158.64:8084";
 
 //$config['server_root']=$_SERVER['DOCUMENT_ROOT'];
 
