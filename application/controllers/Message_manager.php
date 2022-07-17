@@ -264,7 +264,7 @@ foreach ($thread->getItems() as $item) {
             $rand = rand(1,4);
             $default = base_url('assets/img/avatar/avatar-'.$rand.'.png');	
         
-        if ($r['user_id'] != "1534821335574388736") {
+        if ($r['user_id'] != "54034537193") {
             # code...
             
             
@@ -403,9 +403,17 @@ foreach ($thread->getItems() as $item) {
             // $name_ig = "akundemo887";
 
                     // $username="hello_world.192";
+
                     $username="lili.s3150";
                     $password="ryzen500";
                     $name_ig="lili.s3150";
+
+
+
+                    // $username="dispendukcapil.sby";
+                    // $password="2016PDip";
+                    // $name_ig="dispendukcapil.sby";
+
 
 
                     // $username="akundemo79";
@@ -1250,7 +1258,7 @@ public function get_post_conversation_instagram()
 			<img alt="image" class="mr-3 rounded-circle border" width="50" height="50" src="'.$default.'">
 			<div class="media-body">
 			  <div class="mt-0 mb-1 font-weight-bold text-primary">'.$r['nama'].'<span class="badge badge-danger badge-pill ml-2 px-2 py-1 d-none">2</span></div>
-			  <div class="text-small font-600-bold"><i class="fas fa-circle text-success pb-1" style="font-size:8px"></i> '.$r['nama'].'</div>
+			  <div class="text-small font-600-bold"><i class="fas fa-circle text-success pb-1" style="font-size:8px"></i> '.$r['phone'].'</div>
 			</div>
 		</li>';
 
@@ -1595,20 +1603,78 @@ public function get_post_conversation()
 }
 
 
+
+public function get_post_conversation_whatsapp_pelapor()
+{
+    // create curl resource 
+    $ch = curl_init(); 
+    // set url 
+    curl_setopt($ch, CURLOPT_URL, "http://lewatwa.disdukcapilsurabaya.id/api/getUserList"); 
+
+    //return the transfer as a string 
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+
     
-    public function get_post_conversation_whatsapp_view()
+// $headers = array(
+//     "Accept: application/json",
+//  );
+//  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    // $output contains the output string 
+    $output = curl_exec($ch); 
+  
+    $res =json_decode($output);
+
+
+    print_r(json_encode($res->data));
+
+    // $lalas = json_decode($output);
+
+
+    
+    // echo $output;
+    // var_dump($output);
+//    $lalas= $output;
+    
+
+//    foreach($lalas as $blabla) {
+//     # code...
+
+//     print_r($blabla);
+//    }
+    // $lalas = json_decode($output);
+
+    // $test =print_r($lalas->data);
+
+    // $jadi_json = json_encode($test);
+
+    // print_r($jadi_json);
+
+    // foreach ($output as $lalas) {
+    //     # code...
+    // }
+    // var_dump(json_decode($output));
+    // echo json_encode($output);
+}
+
+    
+    public function get_post_conversation_whatsapp_view($id)
     {
         // create curl resource 
         $ch = curl_init(); 
         // set url 
-        curl_setopt($ch, CURLOPT_URL, "http://lewatwa.disdukcapilsurabaya.id/api/getUserChatLogAll"); 
+        curl_setopt($ch, CURLOPT_URL, "http://lewatwa.disdukcapilsurabaya.id/api/getUserChatLog/$id"); 
 
         //return the transfer as a string 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
         // $output contains the output string 
         $output = curl_exec($ch); 
 
-        print_r($output);
+        
+        
+    $res =json_decode($output);
+
+
+    print_r(json_encode($res->data));
         // var_dump(json_decode($output));
         // echo json_encode($output);
     }
@@ -1631,7 +1697,8 @@ public function get_post_conversation()
         $output = curl_exec($ch); 
 
         $lalas = json_decode($output);
-        // $lalas = (array) $output;
+        // $lalas = (
+            array($output);
         // print_r($lalas);
         // $lalas= array($output);
         
@@ -1718,7 +1785,7 @@ public function get_post_conversation()
         
         // $conversations = $this->fb_rx_login->get_messages_from_thread($thread_id,$post_access_token);
 
-//	$id = 5;
+        //	$id = 5;
         // $conversations = $this->fb_rx_login->get_messages_from_thread_whats_app($id);
 
         // $this->basic->insert_data("fb_chat_data",array("user_id"=>$from_user_id,"message"=>serialize($conversations['data'])));
@@ -1728,7 +1795,7 @@ public function get_post_conversation()
         $db2 =$this->load->database('otherdb',TRUE);
 
         // $db2->where("src",$id);
-        // $db2->where('date_format(datetime,"%Y-%m-%d")', 'CURDATE()', FALSE);
+        $db2->where('date_format(datetime,"%Y-%m-%d")', 'CURDATE()', FALSE);
         $db2->order_by("src",'DESC');
 
         // $dates= date("Ym");
@@ -1783,7 +1850,7 @@ public function get_post_conversation()
                 break;
             }
         }
-// error_reporting(0);
+        // error_reporting(0);
         // $str = '';
         // var_dump($conversations['events']);
 
@@ -1852,6 +1919,165 @@ public function get_post_conversation()
    
 
 
+    public function get_post_conversation_yaestar_all()
+    {
+        $this->ajax_check();
+        // error_reporting(0);
+
+        // for time zone checking
+        $where = array();
+        $where['where'] = array(
+            'user_id' => $this->user_id,
+            'facebook_rx_fb_user_info_id' => $this->session->userdata('facebook_rx_fb_user_info')
+            );
+
+        $from_user_id = $this->input->post('from_user_id',true);
+        $thread_id = $this->input->post('thread_id',true);
+        $page_table_id = $this->input->post('page_table_id',true);
+        $last_message_id = $this->input->post('last_message_id',true);  
+        $id = $this->input->post('id',true);
+        $data_id = $this->input->post('data-id',true);
+        $page_info = $this->basic->get_data('facebook_rx_fb_page_info',array('where'=>array('id'=>$page_table_id)));
+
+
+        //$post_access_token = $page_info[0]['page_access_token'];
+       // $page_name = $page_info[0]['page_name'];
+
+        
+        // $conversations = $this->fb_rx_login->get_messages_from_thread($thread_id,$post_access_token);
+
+        //	$id = 5;
+        // $conversations = $this->fb_rx_login->get_messages_from_thread_whats_app($id);
+
+        // $this->basic->insert_data("fb_chat_data",array("user_id"=>$from_user_id,"message"=>serialize($conversations['data'])));
+
+
+
+        $db2 =$this->load->database('otherdb',TRUE);
+
+        // $db2->where("src",$id);
+        // $db2->where('date_format(datetime,"%Y-%m-%d")', 'CURDATE()', FALSE);
+        $db2->order_by("src",'DESC');
+
+        // $dates= date("Ym");
+        // var_dump($dates);
+        // $data_chat_twitter = $db2->get("cdr_'.$dates.'")->result_array();
+
+        $data_chat_twitter = $db2->get("cdr_202207")->result_array();
+
+        // var_dump($data_chat_twitter);
+
+        // var_dump($data_chat_twitter);
+        
+        $db2->where("src",$id);
+        $db2->order_by("src","ASC");
+        $db2->limit(1);
+        $last_id=$db2->get('cdr_202206')->row("src");
+
+        // var_dump($data_chat_twitter);
+
+        // var_dump($this->db->last_query());
+        // foreach ($conversations['events'] as $key => $value) {
+        //     # code...
+      
+        //     $data = array(
+        //         'id'=>NULL,
+        //         'recept_id' =>$value->message_create->target->recipient_id,
+        //         'sender_id' =>$value->message_create->sender_id,
+        //         'message'=>$value->message_create->message_data->text
+        //     );
+        //     $this->db->insert('twitter_chat',$data);
+
+        // }
+      
+
+
+
+        // var_dump($conversations['events'][0]);
+        if(!isset($conversations['events'])) $conversations['events']=array();
+        $conversations['events']= array_reverse($conversations['events']);
+        // var_dump($conversations['events']);
+        // echo "<pre>"; print_r($conversations['data']); exit;
+
+        $lalas = $conversations['events'];
+
+
+        $show_after_this_index = NULL;
+        if(!empty($last_message_id))
+        foreach($data_chat_twitter as $key=>$value)
+        {
+            if($value['sender_id']==$last_id) {
+                $show_after_this_index = $key;
+                break;
+            }
+        }
+        // error_reporting(0);
+        // $str = '';
+        // var_dump($conversations['events']);
+
+        // var_dump($data_chat_twitter);
+
+        foreach($data_chat_twitter as $key=>$value)
+        {
+            if(!is_null($show_after_this_index) && $key<=$show_after_this_index) continue;
+           
+            //  $created_time = $value['tanggal']." UTC";
+            // isset($value['from']['name']) ? $value['from']['name'] = $value['from']['name'] : $value['from']['name'] = '';
+        //     if($value['sender_id'] == $value['recept_id'])
+        //     {
+        //         // $str ='
+        //         // <div class="chat-item chat-right" style="">
+        //         //      <div class="chat-details mr-0 ml-0" message_id="'.$value['uniqueid'].'">
+        //         //         <div class="chat-text">'.chunk_split($value['disposition'], 50, '<br>').'</div>
+        //         //         <div class="chat-time">'.$value['uniqueid'].' </div>
+        //         //      </div>
+        //         // </div>';
+
+
+        //         if ($value['personalcontact'] == NULL) {
+        //             # code...
+               
+        //      $str = '<div class="card">
+        //      <div class="card-header">
+        //      <h5>'.$value['src'].'</h5>
+        //      <br>
+        //      <span>'.$value['datetime'].'</span>
+        //      </div>
+        //      <div class="card-body">
+        //        <h6 class="card-title">Status Panggilan :'.$value['disposition'].'</h6>
+        //        <p class="card-text">Durasi Telfon : '.$value['duration'].'</p>
+        //        <p class="card-text">Tipe Telfon : '.$value['calltype'].'</p>
+
+        //        </div>
+        //    </div>';
+        //         }else {
+                    
+        //      $str = '<div class="card">
+        // <div class="card-header">
+        // <h5>'.$value['personalcontact'].'</h5>
+        // <br>
+        // <span>'.$value['datetime'].'</span>
+        // </div>
+        
+        //      <div class="card-body">
+        //        <h5 class="card-title">'.$value['disposition'].'</h5>
+        //        <p class="card-text">Durasi Telfon : '.$value['duration'].'</p>
+        //        <p class="card-text">Tipe Telfon : '.$value['calltype'].'</p>
+
+        //      </div>
+        //    </div>';
+        //         }
+        //     }
+            
+        // echo json_encode($value);
+
+        }
+        // var_dump($data_chat_twitter);
+        
+        echo json_encode($data_chat_twitter);
+
+    }
+
 
     public function reload_data()
     {
@@ -1878,7 +2104,7 @@ public function get_post_conversation()
     public function get_post_conversation_twitter_view()
     {
         $this->ajax_check();
-        error_reporting(0);
+        // error_reporting(0);
 
 
         // for time zone checking
@@ -1941,6 +2167,9 @@ public function get_post_conversation()
         // var_dump($this->db->last_query());
         foreach ($conversations['events'] as $key => $value) {
             # code...
+
+            $epoch = $value->created_timestamp;
+            $lalas = $epoch/1000;
       
             if ($value->message_create->sender_id == "1534821335574388736") {
                 # code...
@@ -1948,7 +2177,7 @@ public function get_post_conversation()
                     'id'=>NULL,
                     'recept_id' =>$value->message_create->target->recipient_id,
                     'sender_id' =>$value->message_create->sender_id,
-                    'datetime'=>$value->created_timestamp,
+                    'datetime'=> date('r',(int) $lalas),
                     'message'=>$value->message_create->message_data->text,
                     'status'=>'Answer'
                 );
@@ -1967,7 +2196,7 @@ public function get_post_conversation()
                            'id'=>NULL,
                            'recept_id' =>$value->message_create->target->recipient_id,
                            'sender_id' =>$value->message_create->sender_id,
-                           'datetime'=>$value->created_timestamp,
+                           'datetime'=> date('r',(int) $lalas),
                            'message'=>$value->message_create->message_data->text,
                            'status'=>'No Answer'
                        );
@@ -2053,7 +2282,7 @@ public function get_post_conversation()
     public function get_post_conversation_twitter()
     {
         $this->ajax_check();
-        error_reporting(0);
+        error_reporting(0); 
 
         // for time zone checking
         $where = array();
@@ -2221,6 +2450,95 @@ error_reporting(0);
                         </div>
                 </div>';
                 
+            
+
+        }
+
+    }
+
+
+    public function updateToggleWAOperator($id)
+    {
+        // var_dump($id);
+
+        // die();
+        $post = [
+            'userId' => $id,
+            'status'=>"operator"
+        ];
+        
+        $ch = curl_init('http://lewatwa.disdukcapilsurabaya.id/api/updatePelapor');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+         
+        // execute!
+        $response = curl_exec($ch);
+        
+        // close the connection, release resources used
+        // curl_close($ch);
+        
+        // do anything you want with your response
+        // var_dump($response);
+
+
+        if ($response) {
+            # code...
+        // echo '
+        //         <div class="chat-item chat-right" style="">
+        //              <div class="chat-details mr-0 ml-0" message_id="'.$id.'">
+        //                 <div class="chat-text">'.chunk_split($reply_message, 50, '<br>').'</div>
+        //                 <div class="chat-time">'.date('d M Y H:i:s').'</div>
+        //                 </div>
+        //         </div>';
+                
+        redirect('message_manager/whatsapp_message_dashboard');
+            
+
+        }
+
+    }
+
+
+
+    public function updateToggleWA($id)
+    {
+        // $id = $this->input->post('id',true);
+        // $reply_message = $this->input->post('reply_message',true);
+        // $message_tag = $this->input->post('message_tag',true);
+
+
+        // var_dump($reply_message);
+
+        $post = [
+            'userId' => $id,
+            'status'=>"bot"
+        ];
+        
+        $ch = curl_init('http://lewatwa.disdukcapilsurabaya.id/api/updatePelapor');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+         
+        // execute!
+        $response = curl_exec($ch);
+        
+        // close the connection, release resources used
+        // curl_close($ch);
+        
+        // do anything you want with your response
+        // var_dump($response);
+
+
+        if ($response) {
+            # code...
+        // echo '
+        //         <div class="chat-item chat-right" style="">
+        //              <div class="chat-details mr-0 ml-0" message_id="'.$id.'">
+        //                 <div class="chat-text">'.chunk_split($reply_message, 50, '<br>').'</div>
+        //                 <div class="chat-time">'.date('d M Y H:i:s').'</div>
+        //                 </div>
+        //         </div>';
+                
+        redirect('message_manager/whatsapp_message_dashboard');
             
 
         }
