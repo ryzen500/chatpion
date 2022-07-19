@@ -409,7 +409,7 @@ class Admin extends Home
                 }
 
                 if ($_FILES['favicon']['size'] != 0) {
-                    $photo = "favicon.png";
+                    $photo = "dukcapil-icons.png";
                     $config2 = array(
                         "allowed_types" => "png",
                         "upload_path" => $base_path,

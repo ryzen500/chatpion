@@ -71,7 +71,7 @@
                     recept_id: { editable: false },
                     message: { editable: false },
                     user_balas: { editable: false },
-                    // nama: { editable: false },
+                    datetime: { editable: false },
                     // nik: { type: "number" },
                     // phone: { type: "number" }
                   }
@@ -107,6 +107,11 @@
               {
                 field: "message",
                 title: "Pesan",
+                width: 105
+              },
+              {
+                field: "datetime",
+                title: "Waktu",
                 width: 105
               },
               {

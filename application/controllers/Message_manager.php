@@ -320,7 +320,7 @@ foreach ($thread->getItems() as $item) {
     //  $db2->where('date_format(datetime,"%Y-%m-%d")', 'CURDATE()', FALSE);
 
     $dates= date("y-m");
-     $response = $db2->get("cdr_'.$dates.'")->result_array();
+     $response = $db2->get("cdr_202207")->result_array();
 
 
         if(isset($response['error']))
@@ -451,11 +451,15 @@ foreach ($thread->getItems() as $item) {
                         var_dump($image->getUrl());
                     }
                 }else{
+
+                    $data1 = $item->getTimestamp(); 
+$data2 = round($data1/1000000); 
+
                     $data = array(
                                 'id'=>NULL,
                                 'threadId'=>$thread->getThreadId(),
                                 'user_id'=>$item->getUserId(),
-                                'timestamp'=> $item->getTimestamp(),
+                                'timestamp'=> date('Y-m-d h:i:s',(int) $data2),
                                 'message'=>$item->getText(),
                                 'status'=>"No Answer"
                             );
@@ -2177,7 +2181,7 @@ public function get_post_conversation_whatsapp_pelapor()
                     'id'=>NULL,
                     'recept_id' =>$value->message_create->target->recipient_id,
                     'sender_id' =>$value->message_create->sender_id,
-                    'datetime'=> date('r',(int) $lalas),
+                    'datetime'=> date('Y-m-d h:i:s',(int) $lalas),
                     'message'=>$value->message_create->message_data->text,
                     'status'=>'Answer'
                 );
@@ -2196,7 +2200,7 @@ public function get_post_conversation_whatsapp_pelapor()
                            'id'=>NULL,
                            'recept_id' =>$value->message_create->target->recipient_id,
                            'sender_id' =>$value->message_create->sender_id,
-                           'datetime'=> date('r',(int) $lalas),
+                           'datetime'=> date('Y-m-d h:i:s',(int) $lalas),
                            'message'=>$value->message_create->message_data->text,
                            'status'=>'No Answer'
                        );

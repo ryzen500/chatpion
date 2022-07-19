@@ -44,6 +44,11 @@ class Dashboard extends Home
     public function index($default_value='0')
     {
 
+        // $input =$this->input->post('month_no',true);
+
+        // var_dump($input);
+        // die();
+
         $this->is_broadcaster_exist=$this->broadcaster_exist(); 
         if($this->session->userdata('user_type') != 'Admin') $default_value='0';
         if($default_value == '0')
@@ -123,7 +128,9 @@ class Dashboard extends Home
 
        //    var_dump(sizeof($items));
     $fbsubs = count($items['data']);
-    $lalas = $this->db->count_all('fb_chat_data');
+    // $this->db->distinct('message');
+    $lalas = $this->db->query("SELECT COUNT(`message`) as total FROM instagram_chat WHERE timestamp LIKE '".date('y-m-d')."%'")->result_array();
+
     // var_dump($fbsub);
 
     
@@ -133,6 +140,24 @@ class Dashboard extends Home
     $twitChatAnswer = $this->db->get('twitter_chat')->result_array();
     
 $twitChatAnswers = sizeof($twitChatAnswer);
+
+
+
+$db2 =$this->load->database('otherdb',TRUE);
+
+$db2->count_all('cdr_202207');
+
+$yaestarTotal = $db2->get('cdr_202207')->result_array();
+
+
+$db2 =$this->load->database('otherdb',TRUE);
+
+$db2->where('date_format(datetime,"%Y-%m-%d")', 'CURDATE()', FALSE);
+$db2->order_by("src",'DESC');
+
+
+$yaestarHariIni = $db2->get('cdr_202207')->result_array();
+// var_dump(sizeof($yaestarHariIni));
 
 
 
@@ -180,11 +205,12 @@ $twitChatNoAnswers = sizeof($twitChatNoAnswer);
             }
             // this section is for circle chart under different subscriber source
 
-            $data['fbsub'] = $lalas;
+            $data['fbsub'] =  intval($lalas[0]['total']);
             $data['fbsubs'] = $fbsubs;
             $data['answersChat']=$twitChatAnswers;
             $data['answersNoChat']=$twitChatNoAnswers;
-
+            $data['totalYaestar']=sizeof($yaestarTotal);
+            $data['totalYaestarToday']=sizeof($yaestarHariIni);
 
             $data['petugas']=$twitEmployeeAnswerss;
 
@@ -352,35 +378,56 @@ $twitChatNoAnswers = sizeof($twitChatNoAnswer);
         // end Fourth Section (ecommerce total Earning Graphical)
 
 
-        $month_name_array = $this->db->query("SELECT `user_id`,COUNT(`user_id`) as user FROM instagram_chat GROUP BY `user_id`")->result_array();
-        $twitter_grafik = $this->db->query("SELECT `sender_id`,COUNT(`sender_id`) as sender FROM twitter_chat GROUP BY `sender_id`; ")->result_array();
+        $month_name_array = $this->db->query("SELECT `user_balas` as user_id,COUNT(`user_balas`) as user FROM instagram_chat GROUP BY `user_balas`")->result_array();
+        
+        // $month_name_array = $this->db->query("SELECT `user_id`,COUNT(`user_id`) as user FROM instagram_chat GROUP BY `user_id`")->result_array();
+        // $twitter_grafik = $this->db->query("SELECT `user_balas`,COUNT(DISTINCT(`user_id`)) as sender FROM twitter_chat GROUP BY `user_balas`; ")->result_array();
+        
+        $twitter_grafik =$this->db->query("SELECT sender_id,COUNT(DISTINCT(`sender_id`)) as sender FROM twitter_chat WHERE sender_id !='1534821335574388736'")->result_array();
 
-        $whatsapp_grafik = $this->fb_rx_login->get_grafik_mmessage_whatsapp(); 
+        $PelaporInstagram=$this->db->query("SELECT COUNT(DISTINCT(user_id)) as user_id FROM instagram_chat WHERE user_id != 54034537193; ")->result_array();
+        $whatsapp_grafik = $this->fb_rx_login->get_messages_from_thread_pelapor(); 
 
-        // var_dump($whatsapp_grafik);
+
+        // $yaestar = $db2->query("SELECT COUNT(`src`) as user FROM cdr_202207 WHERE datetime LIKE '".date('y-m-d')."%' ")->result_array();
+
+        $db2 =$this->load->database('otherdb',TRUE);
+
+        // $db2->where("src",$id);
+        $db2->where('date_format(datetime,"%Y-%m-%d")', 'CURDATE()', FALSE);
+        $db2->order_by("src",'DESC');
+        $yaestar =$db2->get("cdr_202207")->result_array();
+        // var_dump($yaestar);
 
         // var_dump($month_name_array);
 
         // Fifth Item section (Subscribers combined chart section 12 months)
-            // $month_name_array = array(
-            //     '12' => 'December',
-            //     '11' => 'November',
-            //     '10' => 'October',
-            //     '9' => 'September',
-            //     '8' => 'August',
-            //     '7' => 'July',
-            //     '6' => 'June',
-            //     '5' => 'May',
-            //     '4' => 'April',
-            //     '3' => 'March',
-            //     '2' => 'February',
-            //     '1' => 'January',
-            // );
+            $nama_bulan = array(
+                '12' => 'December',
+                '11' => 'November',
+                '10' => 'October',
+                '09' => 'September',
+                '08' => 'August',
+                '07' => 'July',
+                '06' => 'June',
+                '05' => 'May',
+                '04' => 'April',
+                '03' => 'March',
+                '02' => 'February',
+                '01' => 'January',
+            );
+            $data['bulan'] = $nama_bulan;
+
+
             $data['last_tweleve_month'] = $month_name_array;
 
+            
             $data['twitter_grafik'] = $twitter_grafik;
 
-            $data['whatsapp_grafik']= $whatsapp_grafik;
+            $data['whatsapp_grafik']= $whatsapp_grafik['data'];
+
+            $data['pelapor_ig'] = $PelaporInstagram[0]["user_id"];
+            $data['yaestar_grafik']=[sizeof($yaestar)];
 
             $total_subscribers = [];
             $email_subscribers = [];
@@ -663,6 +710,9 @@ $twitChatNoAnswers = sizeof($twitChatNoAnswer);
 
         $this->is_broadcaster_exist=$this->broadcaster_exist(); 
         $month_no = $this->input->post('month_no',true);
+
+        // var_dump($month_no);
+        // die();
         if($month_no == 'year') $search_year = date("Y");
         else $search_month = date("Y-{$month_no}");
 
@@ -681,22 +731,24 @@ $twitChatNoAnswers = sizeof($twitChatNoAnswer);
 
         $where = array('where' => $where_simple);
 
-        $fbsub = $igsub = $esub = 0;
-        $select = array('SUM(subscriber_type="system") as esub','SUM(CASE WHEN subscriber_type="messenger" AND social_media="fb" THEN 1 ELSE 0 END) as fbsub','SUM(CASE WHEN subscriber_type="messenger" AND social_media="ig" THEN 1 ELSE 0 END) as igsub');
+        $igsub = $this->db->query("SELECT COUNT(`message`) as total FROM instagram_chat WHERE MONTH(timestamp)='$month_no'")->result_array();
+        // var_dump(intval($igsub[0]['total']));
+        // die();
+        // $select = array('SUM(subscriber_type="system") as esub','SUM(CASE WHEN subscriber_type="messenger" AND social_media="fb" THEN 1 ELSE 0 END) as fbsub','SUM(CASE WHEN subscriber_type="messenger" AND social_media="ig" THEN 1 ELSE 0 END) as igsub');
 
-        $subscriber_info = $this->basic->get_data('messenger_bot_subscriber',$where,$select);
+        // $subscriber_info = $this->basic->get_data('messenger_bot_subscriber',$where,$select);
 
-        if(count($subscriber_info) == 1 || count($subscriber_info) > 1) {
-            $fbsub = $subscriber_info[0]['fbsub'] ?? 0;
-            $igsub = $subscriber_info[0]['igsub'] ?? 0;
+        // if(count($subscriber_info) == 1 || count($subscriber_info) > 1) {
+            $fbsub =  $this->db->query("SELECT COUNT(`message`) as total FROM twitter_chat WHERE MONTH(datetime)='$month_no'")->result_array();
+        //     $igsub = $subscriber_info[0]['igsub'] ?? 0;
             $esub = $subscriber_info[0]['esub'] ?? 0;
-        }
-        $total_sub = $fbsub + $igsub + $esub;
+        // }
+        // $total_sub = $fbsub + $igsub + $esub;
 
-        $data['fbsub'] = $fbsub;
-        $data['igsub'] = $igsub;
+        $data['fbsub'] = intval($igsub[0]['total']);
+        $data['igsub'] = intval($igsub[0]['total']);
         $data['esub'] = $esub;
-        $data['total_sub'] = $fbsub + $igsub + $esub;
+        // $data['total_sub'] = $fbsub + $igsub + $esub;
 
         // end of first item section
         echo json_encode($data,true);

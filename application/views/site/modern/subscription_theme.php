@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   <title><?php echo $this->config->item('product_name')." | ".$page_title;?></title>
-  <!-- <link rel="shortcut icon" href="<?php echo base_url();?>assets/img/favicon.png"> -->
+  <link rel="shortcut icon" href="<?php echo base_url();?>assets/img/dukcapil-icons.png">
   <?php if($is_rtl) 
   { ?>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/bootstrap/css/rtl/bootstrap.min.css">

@@ -266,7 +266,7 @@
  			                         </div>
 			             		</div>
 			             		<div class="col-6 my-auto text-center">
-			             			<img class="img-fluid" src="<?php echo base_url().'assets/img/favicon.png';?>" alt="Favicon" style="max-width:50px;"/>
+			             			<img class="img-fluid" src="<?php echo base_url().'assets/img/dukcapil-icons.png';?>" alt="Favicon" style="max-width:50px;"/>
 			             		</div>
 			             	</div>
 						</div>

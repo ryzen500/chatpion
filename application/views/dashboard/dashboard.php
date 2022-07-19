@@ -46,17 +46,17 @@ $month_name_array = array(
             <div class="card-stats-items month_change_middle_content">
               <div class="card-stats-item">
                 <div class="card-stats-item-count text-primary gradient" id="fbsub"><?php echo custom_number_format($fbsub); ?></div>
-                <div class="card-stats-item-label"><?php echo $this->lang->line('Facebook'); ?></div>
+                <div class="card-stats-item-label"><?php echo $this->lang->line('Hari Ini '); ?></div>
               </div>
               
               <div class="card-stats-item">
                 <div class="card-stats-item-count text-secondary gradient" id="igsub"><?php echo custom_number_format($igsub); ?></div>
                 <div class="card-stats-item-label"><?php echo $this->lang->line('Instagram'); ?></div>
               </div>
-              <!-- <div class="card-stats-item">
-                <div class="card-stats-item-count text-secondary gradient" id="igsub"><?php echo custom_number_format($twitchats); ?></div>
-                <div class="card-stats-item-label"><?php echo $this->lang->line('Twitter'); ?></div>
-              </div> -->
+              <div class="card-stats-item">
+                <div class="card-stats-item-count text-secondary gradient" id="pelapor_ig"><?php echo custom_number_format($pelapor_ig); ?></div>
+                <div class="card-stats-item-label"><?php echo $this->lang->line('Pelapor Instagram'); ?></div>
+              </div>
               <!-- <div class="card-stats-item">
                 <div class="card-stats-item-count text-info gradient" id="esub"><?php// echo custom_number_format($esub); ?></div>
                 <div class="card-stats-item-label"><?php //echo $this->lang->line('Ecommerce'); ?></div>
@@ -65,12 +65,12 @@ $month_name_array = array(
           </div>
 
           <div class="card-icon shadow-primary bg-primary gradient">
-            <i class="fas fa-user-circle"></i>
+            <i class="fab fa-instagram"></i>
           </div>
           <div class="card-wrap">
             <div class="card-header">
               <h4 class="text-dark dropleft">
-                <?php echo $this->lang->line('Total Chat Fb & IG'); ?>
+                <?php echo $this->lang->line('Instagram  Bulan ').getBulan(date('m'));  ?>
                 <a class="dropdown-toggle text-muted float-right text-small"  data-toggle="dropdown" href="#" id="orders-month"><?php echo $month_name_array[$month_number]; ?></a>
                 <ul class="dropdown-menu dropdown-menu-sm">
                   <!-- <li class="dropdown-title"><?php echo $this->lang->line('Select Month'); ?></li> -->
@@ -91,7 +91,7 @@ $month_name_array = array(
                 
               </h4>
             </div>
-            <div class="card-body text-primary gradient" id="total_subscribers"><?php echo custom_number_format($fbsub +$igsub); ?></div>
+            <div class="card-body text-primary gradient" id="igsub"><?php echo custom_number_format($igsub); ?></div>
           </div>
         </div>
       </div>
@@ -114,10 +114,10 @@ $month_name_array = array(
                 <div class="card-stats-item-count text-secondary gradient" id="igsub"><?php echo custom_number_format($answersNoChat); ?></div>
                 <div class="card-stats-item-label"><?php echo $this->lang->line('Chat Not answered'); ?></div>
               </div>
-              <!-- <div class="card-stats-item">
-                <div class="card-stats-item-count text-secondary gradient" id="igsub"><?php echo custom_number_format($petugas); ?></div>
+              <div class="card-stats-item">
+                <div class="card-stats-item-count text-secondary gradient" id="igsub"><?php echo custom_number_format($fbsub); ?></div>
                 <div class="card-stats-item-label"><?php echo $this->lang->line('Petugas Jawaban'); ?></div>
-              </div> -->
+              </div>
               <!-- <div class="card-stats-item">
                 <div class="card-stats-item-count text-info gradient" id="esub"><?php// echo custom_number_format($esub); ?></div>
                 <div class="card-stats-item-label"><?php //echo $this->lang->line('Ecommerce'); ?></div>
@@ -126,7 +126,7 @@ $month_name_array = array(
           </div>
 
           <div class="card-icon shadow-primary bg-primary gradient">
-            <i class="fas fa-user-circle"></i>
+            <i class="fab fa-twitter"></i>
           </div>
           <div class="card-wrap">
             <div class="card-header">
@@ -158,6 +158,69 @@ $month_name_array = array(
       </div>
 
 
+      
+      <div class="col-lg-4 col-md-6 col-sm-12 pr-md-1">
+        <div class="card card-statistic-2 border">
+          <div class="card-chart">
+            <canvas id="subscribers_chart_1" height="72"></canvas>
+          </div>
+          <div class="card-stats mb-1">
+            <div class="text-center waiting hidden" id="loader"><i class="fas fa-spinner fa-spin blue text-center" style="font-size: 40px;"></i></div>
+            <div class="card-stats-items month_change_middle_content">
+              <div class="card-stats-item">
+                <div class="card-stats-item-count text-primary gradient" id="fbsub"><?php echo custom_number_format($totalYaestarToday); ?></div>
+                <div class="card-stats-item-label"><?php echo $this->lang->line('Yaestar Hari Ini'); ?></div>
+              </div>
+              
+              <div class="card-stats-item">
+                <div class="card-stats-item-count text-secondary gradient" id="igsub"><?php echo custom_number_format($totalYaestar); ?></div>
+                <div class="card-stats-item-label"><?php echo $this->lang->line('Yaestar Bulan Ini'); ?></div>
+              </div>
+              <!-- <div class="card-stats-item">
+                <div class="card-stats-item-count text-secondary gradient" id="igsub"><?php echo custom_number_format($fbsub); ?></div>
+                <div class="card-stats-item-label"><?php echo $this->lang->line('Petugas Jawaban'); ?></div>
+              </div> -->
+              <!-- <div class="card-stats-item">
+                <div class="card-stats-item-count text-info gradient" id="esub"><?php// echo custom_number_format($esub); ?></div>
+                <div class="card-stats-item-label"><?php //echo $this->lang->line('Ecommerce'); ?></div>
+              </div> -->
+            </div>
+          </div>
+
+          <div class="card-icon shadow-primary bg-primary gradient">
+            <i class="fab fa-twitter"></i>
+          </div>
+          <div class="card-wrap">
+            <div class="card-header">
+              <h4 class="text-dark dropleft">
+                <?php echo $this->lang->line('Total Chat Yaestar'); ?>
+                <a class="dropdown-toggle text-muted float-right text-small"  data-toggle="dropdown" href="#" id="orders-month"><?php echo $month_name_array[$month_number]; ?></a>
+                <ul class="dropdown-menu dropdown-menu-sm">
+                  <!-- <li class="dropdown-title"><?php echo $this->lang->line('Select Month'); ?></li> -->
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '01') echo 'active'; ?>" month_no="01"><?php echo $this->lang->line('January');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '02') echo 'active'; ?>" month_no="02"><?php echo $this->lang->line('February');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '03') echo 'active'; ?>" month_no="03"><?php echo $this->lang->line('March');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '04') echo 'active'; ?>" month_no="04"><?php echo $this->lang->line('April');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '05') echo 'active'; ?>" month_no="05"><?php echo $this->lang->line('May');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '06') echo 'active'; ?>" month_no="06"><?php echo $this->lang->line('June');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '07') echo 'active'; ?>" month_no="07"><?php echo $this->lang->line('July');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '08') echo 'active'; ?>" month_no="08"><?php echo $this->lang->line('August');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '09') echo 'active'; ?>" month_no="09"><?php echo $this->lang->line('September');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '10') echo 'active'; ?>" month_no="10"><?php echo $this->lang->line('October');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '11') echo 'active'; ?>" month_no="11"><?php echo $this->lang->line('November');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == '12') echo 'active'; ?>" month_no="12"><?php echo $this->lang->line('December');?></a></li>
+                  <li><a href="#" class="dropdown-item month_change <?php if($month_number == 'year') echo 'active'; ?>" month_no="year"><?php echo $this->lang->line('This Year');?></a></li>
+                </ul>
+                
+              </h4>
+            </div>
+            <div class="card-body text-primary gradient" id="total_subscribers"><?php echo custom_number_format($totalYaestar); ?></div>
+          </div>
+        </div>
+      </div>
+
+
+      
       <!-- 
       <div class="col-lg-4 col-md-6 col-sm-12 pl-md-1 pr-md-1">
         <div class="card card-statistic-2 border">
@@ -243,7 +306,7 @@ $month_name_array = array(
           </div>
 
           <div class="card-icon shadow-primary bg-primary gradient">
-            <i class="fas fa-user-circle"></i>
+            <i class="fab fa-whatsapp"></i>
           </div>
           <div class="card-wrap">
             <div class="card-header">
@@ -368,43 +431,59 @@ $month_name_array = array(
                       <?php 
                         if($whatsapp >= 1000) {
                           //  echo $whatsapp/1000 . "k";
-                          echo $whatsapp;
+                          echo $fbsubs;
 
                         }
                         else {
-                            echo $whatsapp;
+                            echo $fbsubs;
                         }
                       ?>
                     </div>
-                    <div class="detail-name"><?php echo $this->lang->line("Whats App Chat"); ?></div>
+                    <div class="detail-name"><?php echo $this->lang->line("Whats App Pelapor"); ?></div>
                   </div>
                   <div class="statistic-details-item">
                     <div class="detail-value text-primary gradient">
                       <?php 
                         if($email_gain >= 1000) {
                           //  echo $email_gain/1000 . "k";
-                          echo $email_gain;
+                          echo $igsub;
 
                         }
                         else {
-                            echo $email_gain;
+                            echo $igsub;
                         }
                       ?>
                     </div>
-                    <div class="detail-name"><?php echo $this->lang->line("Email Gain"); ?></div>
+                    <div class="detail-name"><?php echo $this->lang->line("Instagram"); ?></div>
                   </div>
                   <div class="statistic-details-item">
                     <div class="detail-value text-secondary gradient">
                       <?php 
                         if($phone_gain >= 1000) {
-                           echo $phone_gain/1000 . "k";
-                        }
-                        else {
-                            echo $phone_gain;
-                        }
+                           echo $twitter_grafik[0]['sender'];
+                          }
+                          else {
+                            echo $twitter_grafik[0]['sender'];
+                            // var_dump($twitter_grafik[0]['sender']);
+                          }
                       ?>
                     </div>
-                    <div class="detail-name"><?php echo $this->lang->line("Phone Number Gain"); ?></div>
+                    <div class="detail-name"><?php echo $this->lang->line("Twitter"); ?></div>
+                  </div>
+
+                  <div class="statistic-details-item">
+                    <div class="detail-value text-secondary gradient">
+                      <?php 
+                        if($phone_gain >= 1000) {
+                           echo sizeof($yaestar_grafik);
+                          }
+                          else {
+                            echo sizeof($yaestar_grafik);
+                            // var_dump($twitter_grafik[0]['sender']);
+                          }
+                      ?>
+                    </div>
+                    <div class="detail-name"><?php echo $this->lang->line("Yaestar"); ?></div>
                   </div>
                 </div>
               </div>
@@ -956,6 +1035,7 @@ $month_name_array = array(
   var v1 = '<?php echo $this->lang->line("Instagram"); ?>';
   var v2 = '<?php echo $this->lang->line("Twitter"); ?>';
   var v3 = '<?php echo $this->lang->line("Whats App"); ?>';
+  var v4 = '<?php echo $this->lang->line("Yaestar"); ?>';
   var gradient_warning = ctx.createLinearGradient(0, 0, 0, 600);
   gradient_warning.addColorStop(0, 'rgba(252, 74, 26)');
   gradient_warning.addColorStop(1, 'rgba(247, 183, 51)'); 
@@ -979,22 +1059,26 @@ $month_name_array = array(
 
   var twitter = twitter_grafik.map(({sender}) => sender);
 
+
+  var yaestar = <?php echo json_encode(array_values($yaestar_grafik)) ?>
+
+
   const whats_app = <?php echo json_encode(array_values($whatsapp_grafik)) ?>
 
-  // console.log(whats_app);
-
-  var whats_app_chat = whats_app.map(({total_chat_user}) => total_chat_user);
-console.log(whats_app_chat);
-
+  
+    var whats_app_chat = whats_app.map(({total_chat_user}) => total_chat_user);
+  // console.log(whats_app_chat);
+  
   var CountInstagram = labels.map(({user})=> user);
   // console.log(CountInstagram);
+  console.log(yaestar);
 
   const subscribers_data = {
    labels: map_labels,
    datasets: [{
      label: v1,
-     type:'line',
-     backgroundColor: 'transparent',
+     type:'bar',
+     backgroundColor: gradient_primary,
      borderColor: gradient_warning,
     //  data: <?php echo json_encode(array_values($total_subscribers)) ?>,
     data:CountInstagram,
@@ -1010,19 +1094,27 @@ console.log(whats_app_chat);
     data:twitter
   
   },
-  //  {
-  //      label: v3,
-  //      type:'bar',
-  //      backgroundColor: gradient_secondary,
-  //      borderColor: 'transparent',
-  //     //  data: <?php //echo json_encode(array_values($phone_subscribers)) ?>,
-  //   data:whats_app_chat
-  //   }
+   {
+       label: v3,
+       type:'bar',
+       backgroundColor: gradient_secondary,
+       borderColor: 'transparent',
+      //  data: <?php echo json_encode(array_values($phone_subscribers)) ?>,
+    data:[whats_app_chat.length]
+    },
+    {
+       label: v4,
+       type:'bar',
+       backgroundColor: gradient_secondary,
+       borderColor: 'transparent',
+      //  data: <?php echo json_encode(array_values($phone_subscribers)) ?>,
+    data:[yaestar]
+    }
    ]
   };
 
   const config = {
-   type: 'line',
+   type: 'bar',
    data: subscribers_data,
    options: {
      responsive: true,
@@ -1162,6 +1254,49 @@ console.log(whats_app_chat);
       });
     });
 </script>
+<?php
+
+function  getBulan($bln){
+  switch  ($bln){
+      case  01:
+      return  " Januari";
+      break;
+      case  02:
+      return  " Februari";
+      break;
+      case  03:
+      return  " Maret";
+      break;
+      case  04:
+      return  " April";
+      break;
+      case  05:
+      return  " Mei";
+      break;
+      case  06:
+      return  " Juni";
+      break;
+      case  07:
+      return  " Juli";
+      break;
+      case 8:
+      return  " Agustus";
+      break;
+      case  9:
+      return  " September";
+      break;
+      case  10:
+      return  " Oktober";
+      break;
+      case  11:
+      return  " November";
+      break;
+      case  12:
+      return  " Desember";
+      break;
+  }
+}
+?>
 
 <!--
 <script>

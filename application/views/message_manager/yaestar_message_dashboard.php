@@ -12,8 +12,99 @@
       <script>
         $(document).ready(function () {
           
-          var base_url="<?php echo base_url(); ?>";
-          var get_post_conversation_url = 'get_post_conversation_yaestar';
+                    var base_url="<?php echo base_url(); ?>";
+                    var get_post_conversation_url = 'get_post_conversation_yaestar';
+          
+                  
+$(document).on('click', 'span.k-button-text', function(e){
+          // var base_url="<?php echo base_url(); ?>";
+
+  //         console.log
+         get_post_conversation_url = 'get_post_conversation_yaestar_all';
+  
+  dataSource = new kendo.data.DataSource({
+              transport: {
+                read: {
+                  url:base_url+'message_manager/'+get_post_conversation_url,
+                  dataType: "json"
+                },
+                parameterMap: function (options, operation) {
+                  if (operation !== "read" && options.models) {
+                    return { models: kendo.stringify(options.models) };
+                  }
+                }
+              },
+
+              batch: true,
+              pageSize: 20,
+              autoSync: true,
+              schema: {
+                model: {
+                  id: "id",
+                  fields: {
+                    // pelapor_id: { editable: false, nullable: true },
+                    // pesan: { editable: false },
+                    // tanggal: { editable: false },
+                    // nama: { editable: false },
+                    personalcontact: { editable: false, nullable: true },
+                    src: { editable: false },
+                    duration: { editable: false },
+                    datetime: { editable: false },
+                    // nama: { editable: false },
+                    // nik: { type: "number" },
+                    // phone: { type: "number" }
+                  }
+                }
+              }
+            });
+
+          $("#grid").kendoGrid({
+            dataSource: dataSource,
+            columnMenu: {
+              filterable: false
+            },
+            height: 680,
+            pageable: true,
+            sortable: true,
+            navigatable: true,
+            resizable: true,
+            reorderable: true,
+            groupable: true,
+            filterable: true,
+            toolbar: ["excel", "pdf","Waktu" ,"search"],
+            columns: [
+              {
+                field: "personalcontact",
+                title: "Nama Personal",
+                width: 300
+              },
+              {
+                field: "src",
+                title: "Nomer Telepon Pemanggil",
+                width: 105
+              },
+              {
+                field: "duration",
+                title: "Durasi Telepon",
+                width: 105
+              },
+              {
+                field: "datetime",
+                title: "Waktu ",
+                width: 105
+              },
+              
+            ],
+          });
+
+});
+
+$(document).on('click','.k-grid-refresh',function(e){
+
+  window.location.reload();
+})
+// console.log(get_post_conversation_url);
+
             dataSource = new kendo.data.DataSource({
               transport: {
                 read: {
@@ -63,7 +154,7 @@
             reorderable: true,
             groupable: true,
             filterable: true,
-            toolbar: ["excel", "pdf", "search"],
+            toolbar: ["excel", "pdf","Menampilkan Semua Data" ,"search","refresh"],
             columns: [
               {
                 field: "personalcontact",
@@ -86,10 +177,13 @@
                 width: 105
               },
               
-             
             ],
           });
+          
         });
+
+
+
       </script>
 
       <style type="text/css">

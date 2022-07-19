@@ -24,7 +24,7 @@ Description: This is a default theme provided by the Author of ChatPion. We high
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<!--====== Favicon Icon ======-->
-	<link rel="shortcut icon" href="<?php echo base_url();?>assets/img/favicon.png">
+	<link rel="shortcut icon" href="<?php echo base_url();?>assets/img/dukcapil-icons.png">
 
 	<!--====== Animate CSS ======-->
 	<link rel="stylesheet" href="<?php echo base_url('assets/modern/css/animate.css');?>">

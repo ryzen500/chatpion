@@ -7,7 +7,7 @@
 	<title><?php echo $page_title;?></title>
 
 	<meta charset="utf-8">
-	<link rel="shortcut icon" href="<?php echo base_url();?>assets/images/favicon.png"> 
+	<link rel="shortcut icon" href="<?php echo base_url();?>assets/images/dukcapil-icons.png"> 
 	<meta name="description" content="<?php echo $meta_description;?>">
 
 	<meta name="keywords" content="<?php echo $meta_keyword;?>">

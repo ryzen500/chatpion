@@ -13,7 +13,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<!-- Favicon -->
-	<link rel="shortcut icon" href="<?php echo base_url();?>assets/img/favicon.png">
+	<link rel="shortcut icon" href="<?php echo base_url();?>assets/img/dukcapil-icons.png">
 
     <!--====== STYLESHEETS ======-->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/site_new/css/normalize.css">
